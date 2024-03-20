@@ -20,7 +20,7 @@ void main() async {
 
   final List<String> moviesToSearch = ['X-Men', 'Iron Man', 'Thor: Tales of Asgard', 'Steven Universe: The Movie'];
   final List<String> seriesToSearch = ['Bikini Warriors', 'Titans', 'Young Justice: Outsiders', 'The Boys'];
-  final List<String> issuesToSearch = ['In the Hands of ... Mephisto!', 'Home', 'Batman in Bethlehem', '"The Black Issue"'];
+  final List<String> issuesToSearch = ['In the Hands of ... Mephisto!', 'Wonder Woman #89 - Home', 'Batman in Bethlehem', '"The Black Issue"'];
 
   print('Recherche des films :');
   await searchMovies(apiKey, endpointMovies, moviesToSearch);
@@ -118,13 +118,13 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: ''),
+      home: MyHomePage(title:""),
     );
   }
 }
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required String title}) : super(key: key);
+  MyHomePage({Key? key, required String title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -258,6 +258,66 @@ class MyHomePage extends StatelessWidget {
                                 ),
                               ),
                             ),
+                        Stack(
+                          children: [
+                            for (int i = 0; i < popularSeriesName.length; i++)
+                              Positioned(
+                                left: (180 + 10) * i + 26, // Calculating the left position
+                                top: 179, // Constant top position for all rectangles
+                                child: Container(
+                                  width: 180,
+                                  height: 242,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                                    color: const Color.fromRGBO(40, 76, 106, 1), // Background color
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularSeriesName.length; i++)
+                                  Positioned(
+                                    left: (156+34)*i + 34, // Position X du texte
+                                    top: 268, // Position Y du texte
+                                    child: Container(
+                                      width: 156, // Largeur du texte
+                                      height: 44, // Hauteur du texte
+                                      child: Center(
+                                        child: Text(
+                                          popularSeriesName[i], // Texte
+                                          style: TextStyle(
+                                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                                            fontFamily: 'Nunito', // Police
+                                            fontSize: 16, // Taille du texte
+                                            fontWeight: FontWeight.normal, // Poids (Normal)
+                                            fontStyle: FontStyle.normal, // Style de police
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularSeriesImage.length; i++)
+                                  Positioned(
+                                    left: (180 + 10) * i + 26, // Position X de l'image
+                                    top: 179, // Position Y de l'image
+                                    child: Container(
+                                        width: 180, // Largeur de l'image
+                                        height: 177, // Hauteur de l'image
+                                        child: Image.network(
+                                          popularSeriesImage[i],
+                                          width: 180,
+                                          height: 177,
+                                        )
+                                    ),
+                                  ),
+                              ],
+                            ),
                             /** COMICS POPULAIRES */
                             Positioned(
                               left: 9, // Position X du rectangle
@@ -334,6 +394,66 @@ class MyHomePage extends StatelessWidget {
                                   ),
                                 ),
                               ),
+                            ),
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularIssuesName.length; i++)
+                                  Positioned(
+                                    left: (180 + 10) * i + 26, // Calculating the left position
+                                    top: 524, // Constant top position for all rectangles
+                                    child: Container(
+                                      width: 180,
+                                      height: 242,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10), // Rounded corners
+                                        color: const Color.fromRGBO(40, 76, 106, 1), // Background color
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                        Stack(
+                          children: [
+                            for (int i = 0; i < popularIssuesName.length; i++)
+                            Positioned(
+                              left: (156+34)*i + 34, // Position X du texte
+                              top: 717, // Position Y du texte
+                              child: Container(
+                                width: 156, // Largeur du texte
+                                height: 44, // Hauteur du texte
+                                child: Center(
+                                  child: Text(
+                                    popularIssuesName[i], // Texte
+                                    style: TextStyle(
+                                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                                      fontFamily: 'Nunito', // Police
+                                      fontSize: 16, // Taille du texte
+                                      fontWeight: FontWeight.normal, // Poids (Normal)
+                                      fontStyle: FontStyle.normal, // Style de police
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            ],
+                        ),
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularIssuesImage.length; i++)
+                                  Positioned(
+                                    left: (180 + 10) * i + 26, // Position X de l'image
+                                    top: 524, // Position Y de l'image
+                                    child: Container(
+                                        width: 180, // Largeur de l'image
+                                        height: 177, // Hauteur de l'image
+                                        child: Image.network(
+                                          popularIssuesImage[i],
+                                          width: 180,
+                                          height: 177,
+                                        )
+                                    ),
+                                  ),
+                              ],
                             ),
                             /** FILMS POPULAIRES*/
                             Positioned(
@@ -412,170 +532,65 @@ class MyHomePage extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            Positioned(
-                              left: 26, // Position X du rectangle
-                              top: 877, // Position Y du rectangle
-                              child: Container(
-                                width: 180, // Largeur du rectangle
-                                height: 242, // Hauteur du rectangle
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                                  color: const Color.fromRGBO(40, 76, 106, 1), // Couleur du fond
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 37, // Position X du texte
-                              top: 1066, // Position Y du texte
-                              child: Container(
-                                width: 156, // Largeur du texte
-                                height: 44, // Hauteur du texte
-                                child: Center(
-                                  child: Text(
-                                    popularMoviesName[0], // Texte
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                                      fontFamily: 'Nunito', // Police
-                                      fontSize: 16, // Taille du texte
-                                      fontWeight: FontWeight.normal, // Poids (Normal)
-                                      fontStyle: FontStyle.normal, // Style de police
-                                    ),
+                        Stack(
+                          children: [
+                            for (int i = 0; i < popularMoviesName.length; i++)
+                              Positioned(
+                                left: (180 + 10) * i + 26, // Calculating the left position
+                                top: 877, // Constant top position for all rectangles
+                                child: Container(
+                                  width: 180,
+                                  height: 242,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10), // Rounded corners
+                                    color: const Color.fromRGBO(40, 76, 106, 1), // Background color
                                   ),
                                 ),
                               ),
-                            ),
-                            Positioned(
-                                left: 26, // Position X de l'image
-                                top: 877, // Position Y de l'image
-                                child: Image.network(
-                                  popularMoviesImage[0],
-                                  width: 180,
-                                  height: 177,
-                                )
-                            ),
-                            Positioned(
-                              left: 216, // Position X du rectangle
-                              top: 877, // Position Y du rectangle
-                              child: Container(
-                                width: 180, // Largeur du rectangle
-                                height: 242, // Hauteur du rectangle
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                                  color: const Color.fromRGBO(40, 76, 106, 1), // Couleur du fond
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 227, // Position X du texte
-                              top: 1066, // Position Y du texte
-                              child: Container(
-                                width: 156, // Largeur du texte
-                                height: 44, // Hauteur du texte
-                                child: Center(
-                                  child: Text(
-                                    popularMoviesName[1], // Texte
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                                      fontFamily: 'Nunito', // Police
-                                      fontSize: 16, // Taille du texte
-                                      fontWeight: FontWeight.normal, // Poids (Normal)
-                                      fontStyle: FontStyle.normal, // Style de police
+                          ],
+                        ),
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularMoviesName.length; i++)
+                                  Positioned(
+                                    left: (156+34)*i + 34, // Position X du texte
+                                    top: 1066, // Position Y du texte
+                                    child: Container(
+                                      width: 156, // Largeur du texte
+                                      height: 44, // Hauteur du texte
+                                      child: Center(
+                                        child: Text(
+                                          popularMoviesName[i], // Texte
+                                          style: TextStyle(
+                                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                                            fontFamily: 'Nunito', // Police
+                                            fontSize: 16, // Taille du texte
+                                            fontWeight: FontWeight.normal, // Poids (Normal)
+                                            fontStyle: FontStyle.normal, // Style de police
+                                          ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                              ],
                             ),
-                            Positioned(
-                                left: 216, // Position X de l'image
-                                top: 877, // Position Y de l'image
-                                child: Image.network(
-                                  popularMoviesImage[1],
-                                  width: 180,
-                                  height: 177,
-                                )
-                            ),
-                            Positioned(
-                              left: 406, // Position X du rectangle
-                              top: 877, // Position Y du rectangle
-                              child: Container(
-                                width: 180, // Largeur du rectangle
-                                height: 242, // Hauteur du rectangle
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                                  color: const Color.fromRGBO(40, 76, 106, 1), // Couleur du fond
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 417, // Position X du texte
-                              top: 1066, // Position Y du texte
-                              child: Container(
-                                width: 156, // Largeur du texte
-                                height: 44, // Hauteur du texte
-                                child: Center(
-                                  child: Text(
-                                    popularMoviesName[2], // Texte
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                                      fontFamily: 'Nunito', // Police
-                                      fontSize: 16, // Taille du texte
-                                      fontWeight: FontWeight.normal, // Poids (Normal)
-                                      fontStyle: FontStyle.normal, // Style de police
+                            Stack(
+                              children: [
+                                for (int i = 0; i < popularMoviesImage.length; i++)
+                                  Positioned(
+                                    left: (180 + 10) * i + 26, // Position X de l'image
+                                    top: 877, // Position Y de l'image
+                                    child: Container(
+                                      width: 180, // Largeur de l'image
+                                      height: 177, // Hauteur de l'image
+                                        child: Image.network(
+                                          popularMoviesImage[i],
+                                          width: 180,
+                                          height: 177,
+                                        )
                                     ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                left: 406, // Position X de l'image
-                                top: 877, // Position Y de l'image
-                                child: Image.network(
-                                  popularMoviesImage[2],
-                                  width: 180,
-                                  height: 177,
-                                )
-                            ),
-
-                            Positioned(
-                              left: 596, // Position X du rectangle
-                              top: 877, // Position Y du rectangle
-                              child: Container(
-                                width: 180, // Largeur du rectangle
-                                height: 242, // Hauteur du rectangle
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                                  color: const Color.fromRGBO(40, 76, 106, 1), // Couleur du fond
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                              left: 607, // Position X du texte
-                              top: 1066, // Position Y du texte
-                              child: Container(
-                                width: 156, // Largeur du texte
-                                height: 44, // Hauteur du texte
-                                child: Center(
-                                  child: Text(
-                                    popularMoviesName[3], // Texte
-                                    style: TextStyle(
-                                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                                      fontFamily: 'Nunito', // Police
-                                      fontSize: 16, // Taille du texte
-                                      fontWeight: FontWeight.normal, // Poids (Normal)
-                                      fontStyle: FontStyle.normal, // Style de police
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Positioned(
-                                left: 596, // Position X de l'image
-                                top: 877, // Position Y de l'image
-                                child: Image.network(
-                                  popularMoviesImage[3],
-                                  width: 180,
-                                  height: 177,
-                                )
+                              ],
                             ),
                           ],
                         ),

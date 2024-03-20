@@ -5,51 +5,104 @@ import 'package:http/http.dart' as http;
 
 List<dynamic> popularMoviesName = [];
 List<dynamic> popularMoviesImage = [];
+List<dynamic> popularSeriesName = [];
+List<dynamic> popularSeriesImage = [];
+List<dynamic> popularIssuesName = [];
+List<dynamic> popularIssuesImage = [];
 
 /** PAS LES BONNES POLICES ! A CHANGER PLUS TARD */
 void main() async {
 
   const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
-  const endpoint = 'movies';
-  final apiUrl = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json";
-  List<dynamic> listMovies = [];
+  const endpointMovies = 'movies';
+  const endpointSeries = 'series';
+  const endpointIssues = 'issues';
 
-  int offset = 0;
-  int limit = 100;
-  bool hasMoreResults = true;
+  final List<String> moviesToSearch = ['X-Men', 'Iron Man', 'Thor: Tales of Asgard', 'Steven Universe: The Movie'];
+  final List<String> seriesToSearch = ['Bikini Warriors', 'Titans', 'Young Justice: Outsiders', 'The Boys'];
+  final List<String> issuesToSearch = ['In the Hands of ... Mephisto!', 'Home', 'Batman in Bethlehem', '"The Black Issue"'];
 
-  while (hasMoreResults) {
-    final response = await http.get(Uri.parse('$apiUrl&offset=$offset&limit=$limit'));
+  print('Recherche des films :');
+  await searchMovies(apiKey, endpointMovies, moviesToSearch);
 
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> data = json.decode(response.body);
-      final List<dynamic> results = data['results'];
+  print('\nRecherche des séries :');
+  await searchSeries(apiKey, endpointSeries, seriesToSearch);
 
-      if (results.isNotEmpty) {
-        listMovies.addAll(results);
-        offset += limit;
-      } else {
-        hasMoreResults = false;
-      }
-    } else {
-      // Gérer les erreurs de la requête
-      print('Erreur de requête: ${response.statusCode}');
-      break;
-    }
-  }
-  // Recuperer les 5 films les plus populaires
-  for (int i = 0; i < listMovies.length; i++) {
-    final film = listMovies[i];
-    final movieName = film['name'];
-    final movieImage = film['image']['icon_url'];
-
-    if (movieName == 'X-Men' || movieName == 'Iron Man' || movieName == 'Thor: Tales of Asgard' || movieName == 'Steven Universe: The Movie' ) {
-      popularMoviesName.add(movieName);
-      popularMoviesImage.add(movieImage);
-    }
-  }
+  print('\nRecherche des issues :');
+  await searchIssues(apiKey, endpointIssues, issuesToSearch);
 
   runApp(const MyApp());
+}
+
+Future<void> searchMovies(String apiKey, String endpoint, List<String> moviesToSearch) async {
+  for (final movieName in moviesToSearch) {
+    final apiUrlMovie = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&filter=name:${movieName}";
+
+    final movies = await fetchData(apiUrlMovie);
+    if (movies.isNotEmpty) {
+      final movie = movies[0]; // Supposons qu'il n'y ait qu'un seul film retourné pour chaque nom de film recherché
+      popularMoviesName.add(movie['name']);
+      popularMoviesImage.add(movie['image']['icon_url']);
+      print('Title: ${movie['name']}');
+      print('image: ${movie['image']['icon_url']}');
+      print('---------------------');
+    } else {
+      print('Aucun film trouvé pour: $movieName');
+    }
+  }
+}
+
+Future<void> searchSeries(String apiKey, String endpoint, List<String> seriesToSearch) async {
+  for (final serieName in seriesToSearch) {
+    final apiUrlSerie = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&filter=name:${serieName}";
+
+    final series = await fetchData(apiUrlSerie);
+    if (series.isNotEmpty) {
+      final serie = series[0]; // Supposons qu'il n'y ait qu'une seule série retournée pour chaque nom de série recherché
+      popularSeriesName.add(serie['name']);
+      popularSeriesImage.add(serie['image']['icon_url']);
+      print('Title: ${serie['name']}');
+      print('image: ${serie['image']['icon_url']}');
+      print('---------------------');
+    } else {
+      print('Aucune série trouvée pour: $serieName');
+    }
+  }
+}
+
+Future<void> searchIssues(String apiKey, String endpoint, List<String> issuesToSearch) async {
+  for (final issueName in issuesToSearch) {
+    final apiUrlIssue = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&filter=name:${issueName}";
+
+    final issues = await fetchData(apiUrlIssue);
+    if (issues.isNotEmpty) {
+      final issue = issues[0]; // Supposons qu'il n'y ait qu'un seul issue retourné pour chaque nom d'issue recherché
+      popularIssuesName.add(issue['name']);
+      popularIssuesImage.add(issue['image']['icon_url']);
+
+      print('Title: ${issue['name']}');
+      print('image: ${issue['image']['icon_url']}');
+      print('---------------------');
+    } else {
+      print('Aucun issue trouvé pour: $issueName');
+    }
+  }
+}
+Future<List<dynamic>> fetchData(String apiUrl) async {
+  List<dynamic> list = [];
+
+  final response = await http.get(Uri.parse(apiUrl));
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = json.decode(response.body);
+    final List<dynamic> results = data['results'];
+    if (results.isNotEmpty) {
+      list.addAll(results);
+    }
+  } else {
+    print('Erreur de requête: ${response.statusCode}');
+  }
+  return list;
 }
 
 class MyApp extends StatelessWidget {

@@ -2,6 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'RecherchePage_attente.dart';
+import 'RecherchePage_Resultat.dart';
+
+// Tableaux pour stocker les résultats
+List<dynamic> moviesName = [];
+List<dynamic> seriesName = [];
+List<dynamic> issuesName = [];
+List<dynamic> personnageName=[];
+
+List<dynamic> moviesImage = [];
+List<dynamic> seriesImage = [];
+List<dynamic> issuesImage = [];
+List<dynamic> personnageImage=[];
 
 void main() async {
 
@@ -242,59 +255,76 @@ class SearchRectangle extends StatelessWidget {
   }
 }
 
-class SearchBar extends StatelessWidget {
+class SearchBar extends StatefulWidget {
+  @override
+  _SearchBarState createState() => _SearchBarState();
+}
+
+class _SearchBarState extends State<SearchBar> {
+  final TextEditingController _textEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        // TextField pour la saisie de texte
         Positioned(
           left: 29,
           top: 92,
           child: Container(
-            width: 321,
+            width: 250, // Ajustez la largeur selon vos besoins
             height: 50,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color.fromRGBO(21, 35, 46, 1),
+            child: TextField(
+              controller: _textEditingController,
+              style: TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                hintText: 'Rechercher...',
+                hintStyle: TextStyle(color: Colors.white.withOpacity(0.5)),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide.none,
+                ),
+                filled: true,
+                fillColor: Color.fromRGBO(21, 35, 46, 1),
+                contentPadding: EdgeInsets.symmetric(horizontal: 16),
+              ),
             ),
           ),
         ),
+        // Icône SVG
         Positioned(
-          left: 46,
-          top: 105,
-          child: Opacity(
-            opacity: 0.5,
+          left: 312.5,
+          top: 107.5,
+          child: GestureDetector(
+            onTap: () {
+              // Naviguer vers une nouvelle page avec les résultats de la recherche
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  transitionDuration: const Duration(milliseconds: 500),
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return FadeTransition(
+                      opacity: animation,
+                      child: RecherchePage_attente(query: _textEditingController.text),
+                    );
+                  },
+                ),
+              );
+              Recherche(context,_textEditingController.text);
+            },
             child: Container(
-              width: 200,
-              height: 23,
-              child: Text(
-                "COMIC, FILM, SÉRIE…",
-                style: TextStyle(
-                  fontFamily: 'Nunito',
-                  fontWeight: FontWeight.w400,
-                  fontSize: 17,
-                  color: Color.fromRGBO(255, 255, 255, 1),
+              child: Center(
+                child: SvgPicture.asset(
+                  'assets/navbar_search.svg',
+                  width: 15,
+                  height: 15,
+                  color: Color.fromRGBO(114, 140, 171, 1),
                 ),
               ),
             ),
           ),
         ),
-    // Icône SVG
-      Positioned(
-        left: 312.5,
-        top: 107.5,
-        child: Container(
-        child: Center(
-        child: SvgPicture.asset(
-          'assets/navbar_search.svg',
-          width: 15, // Taille de l'icône SVG
-          height: 15, // Taille de l'icône SVG
-          color: Color.fromRGBO(114, 140, 171, 1),
-          ),
-        ),
-       ),
-      ),
-     ],
+      ],
     );
   }
 }
@@ -386,4 +416,124 @@ class NavigationIcon extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<void> Recherche(BuildContext context, String query) async {
+  const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
+  const endpointMovies = 'movies';
+  const endpointSeries = 'series_list';
+  const endpointIssues = 'issues';
+  const endpointPerso = 'characters';
+
+  List<dynamic> movies = [];
+  List<dynamic> series = [];
+  List<dynamic> issues = [];
+  List<dynamic> personnages = [];
+
+  // Effectuer la recherche pour les films, séries et issues
+  print("Recherche en cours dans l'API Comic Vine...");
+
+  final apiUrlIssue =
+      "https://comicvine.gamespot.com/api/${endpointIssues}?api_key=${apiKey}&format=json&limit=5&filter=name:${query}";
+  final apiUrlSerie =
+      "https://comicvine.gamespot.com/api/${endpointSeries}?api_key=${apiKey}&format=json&limit=5&filter=name:${query}";
+  final apiUrlMovie =
+      "https://comicvine.gamespot.com/api/${endpointMovies}?api_key=${apiKey}&format=json&limit=5&filter=name:${query}";
+  final apiUrlPerso =
+      "https://comicvine.gamespot.com/api/${endpointPerso}?api_key=${apiKey}&format=json&limit=5&filter=name:${query}";
+
+  issues = await fetchData(apiUrlIssue);
+  series = await fetchData(apiUrlSerie);
+  movies = await fetchData(apiUrlMovie);
+  personnages = await fetchData(apiUrlPerso);
+
+  // Afficher les résultats dans la console
+  print('Résultats de la recherche :');
+
+  print('Films :');
+  for (var movie in movies) {
+    print('Titre: ${movie['name']}');
+    print('Image: ${movie['image']['icon_url']}');
+    print('---------------------');
+
+    moviesName.add(movie['name']);
+    moviesImage.add(movie['image']['icon_url']);
+  }
+
+  print('Séries :');
+  for (var serie in series) {
+    print('Titre: ${serie['name']}');
+    print('Image: ${serie['image']['icon_url']}');
+    print('---------------------');
+
+    seriesName.add(serie['name']);
+    seriesImage.add(serie['image']['icon_url']);
+  }
+
+  print('Issues :');
+  for (var issue in issues) {
+    print('Titre: ${issue['name']}');
+    print('Image: ${issue['image']['icon_url']}');
+    print('---------------------');
+
+    issuesName.add(issue['name']);
+    issuesImage.add(issue['image']['icon_url']);
+  }
+
+  print('Personnages :');
+  for (var perso in personnages) {
+    print('Titre: ${perso['name']}');
+    print('Image: ${perso['image']['icon_url']}');
+    print('---------------------');
+
+    personnageName.add(perso['name']);
+    personnageImage.add(perso['image']['icon_url']);
+  }
+
+  // Après avoir obtenu les résultats de la recherche, on les affiches sur la page de résultats
+  navigateToResultPage(context, query);
+}
+
+Future<List<dynamic>> fetchData(String apiUrl) async {
+  List<dynamic> list = [];
+
+  final response = await http.get(Uri.parse(apiUrl));
+
+  if (response.statusCode == 200) {
+    final Map<String, dynamic> data = json.decode(response.body);
+    final List<dynamic> results = data['results'];
+    if (results.isNotEmpty) {
+      list.addAll(results);
+    }
+  } else {
+    print('Erreur de requête: ${response.statusCode}');
+  }
+  return list;
+}
+
+void navigateToResultPage(BuildContext context, String query) {
+  Future.delayed(const Duration(milliseconds: 100), () {
+    Navigator.pushReplacement(
+      context,
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 500),
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FadeTransition(
+            opacity: animation,
+            child: RecherchePage_Resultat(query: query,
+              moviesName: moviesName, // Passer le tableau de films
+              seriesName: seriesName, // Passer le tableau de séries
+              issuesName: issuesName, // Passer le tableau d'issues
+              personnageName: personnageName, // Passer le tableau de perso
+              moviesImage: moviesImage, // Passer le tableau de films
+              seriesImage: seriesImage, // Passer le tableau de séries
+              issuesImage: issuesImage, // Passer le tableau d'issues
+              personnageImage: personnageImage,// Passer le tableau de perso
+            ),
+          );
+        },
+      ),
+    );
+
+  });
 }

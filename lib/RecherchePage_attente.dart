@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'RecherchePage_Resultat.dart';
 
 void main() async {
 
@@ -21,13 +22,14 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: RecherchePage(title:""),
+      home: RecherchePage_attente(query:""),
     );
   }
 }
+class RecherchePage_attente extends StatelessWidget {
 
-class RecherchePage extends StatelessWidget {
-  RecherchePage({Key? key, required String title}) : super(key: key);
+  final String query;
+  const RecherchePage_attente({Key? key, required this.query}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,76 +39,77 @@ class RecherchePage extends StatelessWidget {
         backgroundColor: Colors.transparent, // Rendre la barre transparente
         elevation: 0, // Supprimer l'ombre de la barre
       ),
-        body: Container(
-          width: 375,
-          height: 1229,
-          color: Theme.of(context).colorScheme.background,
-          child: Stack(
-              children: [
-                /** Rectangle */
-                Container(
-                  width: 375,
-                  height: 163,
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        left: -1,
-                        top: 0,
-                        child: Container(
-                          width: 375,
-                          height: 163,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(0),
-                              topRight: Radius.circular(0),
-                              bottomLeft: Radius.circular(35),
-                              bottomRight: Radius.circular(35),
-                            ),
-                            color: Color.fromRGBO(34, 49, 65, 1),
-                          ),
+      //body: SingleChildScrollView(
+      body: Container(
+        width: double.infinity,
+        height: double.infinity,
+        color: Theme.of(context).colorScheme.background,
+        child: Stack(
+          children: [
+            /** Rectangle */
+            Container(
+              width: 375,
+              height: 163,
+              child: Stack(
+                children: [
+                  Positioned(
+                    left: -1,
+                    top: 0,
+                    child: Container(
+                      width: 375,
+                      height: 163,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(0),
+                          topRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(35),
+                          bottomRight: Radius.circular(35),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                /** RECHERCHE */
-                Positioned(
-                  left: 32, // Position X du texte
-                  top: 34, // Position Y du texte
-                  child: Container(
-                    width: 290, // Largeur du texte
-                    height: 41, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        "Recherche ", // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 30, // Taille du texte
-                          fontWeight: FontWeight.bold, // Poids (Bold)
-                          fontStyle: FontStyle.normal, // Style de police
-                        ),
+                        color: Color.fromRGBO(34, 49, 65, 1),
                       ),
                     ),
                   ),
-                ),
-                /** Barre de Recherche*/
-                SearchBar(),
-                /** Affichage du texte quand aucune recherche n'est encore effectuée */
-                SearchRectangle(),
-                /** LOGO */
-                Positioned(
-                  left: 105.83, // Position X de l'image
-                  top: 283, // Position Y de l'image
-                  child: SvgPicture.asset(
-                    'assets/astronaut.svg', // Chemin vers l'image SVG
-                    width: 157.95, // Largeur de l'image
-                    height: 207, // Hauteur de l'image
+                ],
+              ),
+            ),
+            /** RECHERCHE */
+            Positioned(
+              left: 32,
+              top: 34,
+              child: Container(
+                width: 290,
+                height: 41,
+                child: Center(
+                  child: Text(
+                    "Recherche ",
+                    style: TextStyle(
+                      color: const Color.fromRGBO(255, 255, 255, 1),
+                      fontFamily: 'Nunito',
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.normal,
+                    ),
                   ),
                 ),
-
-              ]),
+              ),
+            ),
+            /** Barre de Recherche*/
+            SearchBar(query),
+            /** Affichage du texte quand aucune recherche n'est encore effectuée */
+            SearchRectangle(),
+            /** LOGO */
+            Positioned(
+              left: 105.83, // Position X de l'image
+              top: 283, // Position Y de l'image
+              child: SvgPicture.asset(
+                'assets/astronaut.svg', // Chemin vers l'image SVG
+                width: 157.95, // Largeur de l'image
+                height: 207, // Hauteur de l'image
+              ),
+            ),
+          ],
         ),
+      ),
       bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
@@ -150,8 +153,11 @@ class SearchRectangle extends StatelessWidget {
     );
   }
 }
-
 class SearchBar extends StatelessWidget {
+  final String query;
+
+  const SearchBar(this.query);
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -177,7 +183,7 @@ class SearchBar extends StatelessWidget {
               width: 200,
               height: 23,
               child: Text(
-                "Ma recherche", // REMPLACER PAR NOTRE RECHERCHE SAISIE
+                query, // Afficher le texte saisi dans la barre de recherche
                 style: TextStyle(
                   fontFamily: 'Nunito',
                   fontWeight: FontWeight.w400,
@@ -188,7 +194,6 @@ class SearchBar extends StatelessWidget {
             ),
           ),
         ),
-        // Icône SVG
         Positioned(
           left: 312.5,
           top: 107.5,
@@ -196,8 +201,8 @@ class SearchBar extends StatelessWidget {
             child: Center(
               child: SvgPicture.asset(
                 'assets/navbar_search.svg',
-                width: 15, // Taille de l'icône SVG
-                height: 15, // Taille de l'icône SVG
+                width: 15,
+                height: 15,
                 color: Color.fromRGBO(114, 140, 171, 1),
               ),
             ),

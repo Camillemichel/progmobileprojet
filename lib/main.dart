@@ -155,7 +155,6 @@ class MyHomePage extends StatelessWidget {
                           PopularSeriesPart(),
                           /**SERIE POPULAIRE */
                           PopularSeriesSection(),
-
                           /** LOGO */
                           Positioned(
                             left: 244, // Position X de l'image
@@ -166,12 +165,10 @@ class MyHomePage extends StatelessWidget {
                               height: 159.68, // Hauteur de l'image
                             ),
                           ),
-
                           /** Rectangle COMICS POPULAIRES */
                           PopularComicsPart(),
                           /** COMICS POPULAIRES */
                           PopularComicsSection(),
-
                           /** Rectangle FILMS POPULAIRES*/
                           PopularMoviesPart(),
                           /** FILMS POPULAIRES */
@@ -265,74 +262,63 @@ class NavigationIcon extends StatelessWidget {
       ],
     );
   }
-}
-class PopularSeriesSection extends StatelessWidget {
+}class PopularSeriesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-
-        Stack(
-          children: [
-            for (int i = 0; i < popularSeriesName.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Calculating the left position
-                top: 179, // Constant top position for all rectangles
-                child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (int i = 0; i < popularSeriesName.length; i++)
+            Stack(
+              children: [
+                // Rectangle
+                Container(
+                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 179), // Marge gauche
                   width: 180,
                   height: 242,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Rounded corners
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Background color
+                    borderRadius: BorderRadius.circular(10), // Coins arrondis
+                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularSeriesName.length; i++)
-              Positioned(
-                left: (156+34)*i + 34, // Position X du texte
-                top: 368, // Position Y du texte
-                child: Container(
-                  width: 156, // Largeur du texte
-                  height: 44, // Hauteur du texte
-                  child: Center(
-                    child: Text(
-                      popularSeriesName[i], // Texte
-                      style: TextStyle(
-                        color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                        fontFamily: 'Nunito', // Police
-                        fontSize: 16, // Taille du texte
-                        fontWeight: FontWeight.normal, // Poids (Normal)
-                        fontStyle: FontStyle.normal, // Style de police
+                //Image
+                Positioned(
+                  left: i == 0 ? 26 : 10,
+                  top: 179,
+                  child: Container(
+                    width: 180, // Largeur de l'image
+                    height: 177, // Hauteur de l'image
+                    child: Image.network(
+                      popularSeriesImage[i], // URL de l'image
+                    ),
+                  ),
+                ),
+                // Texte
+                Positioned(
+                  left: i == 0 ? 34 : 10,
+                  top: 368,
+                  child: Container(
+                    width: 156, // Largeur du texte
+                    height: 44, // Hauteur du texte
+                    child: Center(
+                      child: Text(
+                        popularSeriesName[i], // Texte
+                        style: TextStyle(
+                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                          fontFamily: 'Nunito', // Police
+                          fontSize: 16, // Taille du texte
+                          fontWeight: FontWeight.normal, // Poids (Normal)
+                          fontStyle: FontStyle.normal, // Style de police
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularSeriesImage.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Position X de l'image
-                top: 179, // Position Y de l'image
-                child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularSeriesImage[i],
-                      width: 180,
-                      height: 177,
-                    )
-                ),
-              ),
-          ],
-        ),
-      ],
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
@@ -340,69 +326,60 @@ class PopularSeriesSection extends StatelessWidget {
 class PopularComicsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Stack(
-          children: [
-            for (int i = 0; i < popularIssuesName.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Calculating the left position
-                top: 524, // Constant top position for all rectangles
-                child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (int i = 0; i < popularMoviesName.length; i++)
+            Stack(
+              children: [
+                // Rectangle
+                Container(
+                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 524), // Marge gauche
                   width: 180,
                   height: 242,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Rounded corners
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Background color
+                    borderRadius: BorderRadius.circular(10), // Coins arrondis
+                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularIssuesName.length; i++)
-              Positioned(
-                left: (156+34)*i + 34, // Position X du texte
-                top: 717, // Position Y du texte
-                child: Container(
-                  width: 156, // Largeur du texte
-                  height: 44, // Hauteur du texte
-                  child: Center(
-                    child: Text(
-                      popularIssuesName[i], // Texte
-                      style: TextStyle(
-                        color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                        fontFamily: 'Nunito', // Police
-                        fontSize: 16, // Taille du texte
-                        fontWeight: FontWeight.normal, // Poids (Normal)
-                        fontStyle: FontStyle.normal, // Style de police
+                //Image
+                Positioned(
+                  left: i == 0 ? 26 : 10,
+                  top: 524,
+                  child: Container(
+                    width: 180, // Largeur de l'image
+                    height: 177, // Hauteur de l'image
+                    child: Image.network(
+                      popularIssuesImage[i], // URL de l'image
+                    ),
+                  ),
+                ),
+                // Texte
+                Positioned(
+                  left: i == 0 ? 34 : 10,
+                  top: 717,
+                  child: Container(
+                    width: 156, // Largeur du texte
+                    height: 44, // Hauteur du texte
+                    child: Center(
+                      child: Text(
+                        popularIssuesName[i], // Texte
+                        style: TextStyle(
+                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                          fontFamily: 'Nunito', // Police
+                          fontSize: 16, // Taille du texte
+                          fontWeight: FontWeight.normal, // Poids (Normal)
+                          fontStyle: FontStyle.normal, // Style de police
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularIssuesImage.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Position X de l'image
-                top: 524, // Position Y de l'image
-                child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularIssuesImage[i],
-                      width: 180,
-                      height: 177,
-                    )
-                ),
-              ),
-          ],
-        ),
-      ],
+              ],
+            ),
+        ],
+      ),
     );
   }
 }
@@ -410,69 +387,60 @@ class PopularComicsSection extends StatelessWidget {
 class PopularMoviesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Stack(
-          children: [
-            for (int i = 0; i < popularMoviesName.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Calculating the left position
-                top: 877, // Constant top position for all rectangles
-                child: Container(
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (int i = 0; i < popularMoviesName.length; i++)
+            Stack(
+              children: [
+                // Rectangle
+                Container(
+                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 877), // Marge gauche
                   width: 180,
                   height: 242,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Rounded corners
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Background color
+                    borderRadius: BorderRadius.circular(10), // Coins arrondis
+                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularMoviesName.length; i++)
-              Positioned(
-                left: (156+34)*i + 34, // Position X du texte
-                top: 1066, // Position Y du texte
-                child: Container(
-                  width: 156, // Largeur du texte
-                  height: 44, // Hauteur du texte
-                  child: Center(
-                    child: Text(
-                      popularMoviesName[i], // Texte
-                      style: TextStyle(
-                        color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                        fontFamily: 'Nunito', // Police
-                        fontSize: 16, // Taille du texte
-                        fontWeight: FontWeight.normal, // Poids (Normal)
-                        fontStyle: FontStyle.normal, // Style de police
+                //Image
+                Positioned(
+                  left: i == 0 ? 26 : 10,
+                  top: 877,
+                  child: Container(
+                    width: 180, // Largeur de l'image
+                    height: 177, // Hauteur de l'image
+                    child: Image.network(
+                      popularMoviesImage[i], // URL de l'image
+                    ),
+                  ),
+                ),
+                // Texte
+                Positioned(
+                  left: i == 0 ? 34 : 10,
+                  top: 1066,
+                  child: Container(
+                    width: 156, // Largeur du texte
+                    height: 44, // Hauteur du texte
+                    child: Center(
+                      child: Text(
+                        popularMoviesName[i], // Texte
+                        style: TextStyle(
+                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                          fontFamily: 'Nunito', // Police
+                          fontSize: 16, // Taille du texte
+                          fontWeight: FontWeight.normal, // Poids (Normal)
+                          fontStyle: FontStyle.normal, // Style de police
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-          ],
-        ),
-        Stack(
-          children: [
-            for (int i = 0; i < popularMoviesImage.length; i++)
-              Positioned(
-                left: (180 + 10) * i + 26, // Position X de l'image
-                top: 877, // Position Y de l'image
-                child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularMoviesImage[i],
-                      width: 180,
-                      height: 177,
-                    )
-                ),
-              ),
-          ],
-        ),
-      ],
+              ],
+            ),
+        ],
+      ),
     );
   }
 }

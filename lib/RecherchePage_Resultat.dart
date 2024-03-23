@@ -139,9 +139,22 @@ class RecherchePage_Resultat extends StatelessWidget {
       ),
 
       bottomNavigationBar: CustomBottomNavigationBar(),
-
+      // Nettoyage des listes
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Clear lists here
+          moviesName.clear();
+          seriesName.clear();
+          issuesName.clear();
+          personnageName.clear();
+          moviesImage.clear();
+          seriesImage.clear();
+          issuesImage.clear();
+          personnageImage.clear();
+        },
+        child: Icon(Icons.clear),
+      ),
     );
-
   }
 }
 

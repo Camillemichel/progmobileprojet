@@ -11,6 +11,7 @@ List<dynamic> popularIssuesName = [];
 List<dynamic> popularIssuesImage = [];
 
 /** PAS LES BONNES POLICES ! A CHANGER PLUS TARD */
+
 void main() async {
 
   const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';

@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-import 'RecherchePage_Resultat.dart';
 
 void main() async {
 

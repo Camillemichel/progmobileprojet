@@ -534,6 +534,5 @@ void navigateToResultPage(BuildContext context, String query) {
         },
       ),
     );
-
   });
 }

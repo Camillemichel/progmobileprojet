@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'RecherchePage_attente.dart';
 import 'RecherchePage_Resultat.dart';
+import 'main.dart';
 
 // Tableaux pour stocker les résultats
 List<dynamic> moviesName = [];
@@ -336,11 +337,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
       color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
-        children: const [
-          NavigationIcon(
-            iconPath: 'assets/navbar_home.svg',
-            label: 'Accueil',
-            showHighlight: false, // Seul l'élément "Accueil" aura le surlignage
+        children: [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    AcceuilPage(title:"")
+                ), // Navigate vers PageAccueil
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_home.svg',
+              label: 'Accueil',
+              showHighlight: false, // Activez le surlignage pour l'icône de recherche
+            ),
           ),
           NavigationIcon(
             iconPath: 'assets/ic_books_bicolor.svg',
@@ -357,10 +368,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: 'Films',
             showHighlight: false,
           ),
-          NavigationIcon(
-            iconPath: 'assets/navbar_search.svg',
-            label: 'Recherche',
-            showHighlight: true,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    RecherchePage(title: "")), // Navigate vers RecherchePage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_search.svg',
+              label: 'Recherche',
+              showHighlight: false, // Activez le surlignage pour l'icône de recherche
+            ),
           ),
         ],
       ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'RecherchePage.dart';
 
 List<dynamic> popularMoviesName = [];
 List<dynamic> popularMoviesImage = [];
@@ -108,13 +109,13 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
-      home: MyHomePage(title:""),
+      home: AcceuilPage(title:""),
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key, required String title}) : super(key: key);
+class AcceuilPage extends StatelessWidget {
+  AcceuilPage({Key? key, required String title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -186,10 +187,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
+      color: const Color.fromRGBO(15, 30, 43, 1),
+      // Couleur de fond de la barre de navigation
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
-        children: const [
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // Distribuer les icônes uniformément
+        children: [
           NavigationIcon(
             iconPath: 'assets/navbar_home.svg',
             label: 'Accueil',
@@ -210,10 +213,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: 'Films',
             showHighlight: false,
           ),
-          NavigationIcon(
-            iconPath: 'assets/navbar_search.svg',
-            label: 'Recherche',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    RecherchePage(title: "")), // Navigate vers RecherchePage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_search.svg',
+              label: 'Recherche',
+              showHighlight: false, // Activez le surlignage pour l'icône de recherche
+            ),
           ),
         ],
       ),
@@ -263,63 +275,62 @@ class NavigationIcon extends StatelessWidget {
       ],
     );
   }
-}class PopularSeriesSection extends StatelessWidget {
+}
+class PopularSeriesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (int i = 0; i < popularSeriesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 179), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
-                  ),
-                ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 26 : 10,
-                  top: 179,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularSeriesImage[i], // URL de l'image
-                    ),
-                  ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 34 : 10,
-                  top: 368,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        popularSeriesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      itemCount: popularSeriesName.length,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            // Rectangle
+            Container(
+              margin: EdgeInsets.only(left: index == 0 ? 26 : 10, top: 179), // Marge gauche
+              width: 180,
+              height: 242,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), // Coins arrondis
+                color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+              ),
             ),
-        ],
-      ),
+            //Image
+            Positioned(
+              left: index == 0 ? 26 : 10,
+              top: 179,
+              child: Container(
+                width: 180, // Largeur de l'image
+                height: 177, // Hauteur de l'image
+                child: Image.network(
+                  popularSeriesImage[index], // URL de l'image
+                ),
+              ),
+            ),
+            // Texte
+            Positioned(
+              left: index == 0 ? 34 : 10,
+              top: 368,
+              child: Container(
+                width: 156, // Largeur du texte
+                height: 44, // Hauteur du texte
+                child: Center(
+                  child: Text(
+                    popularSeriesName[index], // Texte
+                    style: TextStyle(
+                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                      fontFamily: 'Nunito', // Police
+                      fontSize: 16, // Taille du texte
+                      fontWeight: FontWeight.normal, // Poids (Normal)
+                      fontStyle: FontStyle.normal, // Style de police
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -327,60 +338,58 @@ class NavigationIcon extends StatelessWidget {
 class PopularComicsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (int i = 0; i < popularMoviesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 524), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
-                  ),
-                ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 26 : 10,
-                  top: 524,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularIssuesImage[i], // URL de l'image
-                    ),
-                  ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 34 : 10,
-                  top: 717,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        popularIssuesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      itemCount: popularMoviesName.length,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            // Rectangle
+            Container(
+              margin: EdgeInsets.only(left: index == 0 ? 26 : 10, top: 524), // Marge gauche
+              width: 180,
+              height: 242,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), // Coins arrondis
+                color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+              ),
             ),
-        ],
-      ),
+            //Image
+            Positioned(
+              left: index == 0 ? 26 : 10,
+              top: 524,
+              child: Container(
+                width: 180, // Largeur de l'image
+                height: 177, // Hauteur de l'image
+                child: Image.network(
+                  popularIssuesImage[index], // URL de l'image
+                ),
+              ),
+            ),
+            // Texte
+            Positioned(
+              left: index == 0 ? 34 : 10,
+              top: 717,
+              child: Container(
+                width: 156, // Largeur du texte
+                height: 44, // Hauteur du texte
+                child: Center(
+                  child: Text(
+                    popularIssuesName[index], // Texte
+                    style: TextStyle(
+                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                      fontFamily: 'Nunito', // Police
+                      fontSize: 16, // Taille du texte
+                      fontWeight: FontWeight.normal, // Poids (Normal)
+                      fontStyle: FontStyle.normal, // Style de police
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -388,60 +397,58 @@ class PopularComicsSection extends StatelessWidget {
 class PopularMoviesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
+    return ListView.builder(
       scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          for (int i = 0; i < popularMoviesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 26 : 10, top: 877), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
-                  ),
-                ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 26 : 10,
-                  top: 877,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      popularMoviesImage[i], // URL de l'image
-                    ),
-                  ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 34 : 10,
-                  top: 1066,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        popularMoviesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+      itemCount: popularMoviesName.length,
+      itemBuilder: (context, index) {
+        return Stack(
+          children: [
+            // Rectangle
+            Container(
+              margin: EdgeInsets.only(left: index == 0 ? 26 : 10, top: 877), // Marge gauche
+              width: 180,
+              height: 242,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10), // Coins arrondis
+                color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+              ),
             ),
-        ],
-      ),
+            //Image
+            Positioned(
+              left: index == 0 ? 26 : 10,
+              top: 877,
+              child: Container(
+                width: 180, // Largeur de l'image
+                height: 177, // Hauteur de l'image
+                child: Image.network(
+                  popularMoviesImage[index], // URL de l'image
+                ),
+              ),
+            ),
+            // Texte
+            Positioned(
+              left: index == 0 ? 34 : 10,
+              top: 1066,
+              child: Container(
+                width: 156, // Largeur du texte
+                height: 44, // Hauteur du texte
+                child: Center(
+                  child: Text(
+                    popularMoviesName[index], // Texte
+                    style: TextStyle(
+                      color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                      fontFamily: 'Nunito', // Police
+                      fontSize: 16, // Taille du texte
+                      fontWeight: FontWeight.normal, // Poids (Normal)
+                      fontStyle: FontStyle.normal, // Style de police
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

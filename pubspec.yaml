@@ -72,6 +72,12 @@ flutter:
     - assets/navbar_movies.svg
     - assets/navbar_series.svg
 
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/Nunito-VariableFont_wght.ttf
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

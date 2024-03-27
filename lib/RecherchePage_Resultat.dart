@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'RecherchePage.dart';
+import 'DetailPersonnage_histoire.dart';
+import 'DetailPersonnage_info.dart';
+import 'main.dart';
 
 void main() async {
 
@@ -225,11 +228,21 @@ class CustomBottomNavigationBar extends StatelessWidget {
       color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
-        children: const [
-          NavigationIcon(
-            iconPath: 'assets/navbar_home.svg',
-            label: 'Accueil',
-            showHighlight: false, // Seul l'élément "Accueil" aura le surlignage
+        children:  [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AcceuilPage(title: "")
+                ),
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_home.svg',
+              label: 'Accueil',
+              showHighlight: false,
+            ),
           ),
           NavigationIcon(
             iconPath: 'assets/ic_books_bicolor.svg',
@@ -246,10 +259,19 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: 'Films',
             showHighlight: false,
           ),
-          NavigationIcon(
-            iconPath: 'assets/navbar_search.svg',
-            label: 'Recherche',
-            showHighlight: true,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) =>
+                    RecherchePage(title: "")), // Navigate vers RecherchePage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_search.svg',
+              label: 'Recherche',
+              showHighlight: true, // Activez le surlignage pour l'icône de recherche
+            ),
           ),
         ],
       ),
@@ -666,59 +688,68 @@ class AffichageResultatPersonnage extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (int i = 0; i <personnageName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 1295), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
-                  ),
-                ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 31 : 10,
-                  top: 1295,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      personnageImage[i], // URL de l'image
+          for (int i = 0; i < personnageName.length; i++)
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => DetailPersonnage_histoire(personnagesName: personnageName[i],personnagesImage: personnageImage[i])),
+                );
+              },
+              child: Stack(
+                children: [
+                  // Rectangle
+                  Container(
+                    margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 1295), // Marge gauche
+                    width: 180,
+                    height: 242,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Coins arrondis
+                      color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                     ),
                   ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 42 : 34,
-                  top: 1484,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        personnageName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
+                  //Image
+                  Positioned(
+                    left: i == 0 ? 31 : 10,
+                    top: 1295,
+                    child: Container(
+                      width: 180, // Largeur de l'image
+                      height: 177, // Hauteur de l'image
+                      child: Image.network(
+                        personnageImage[i], // URL de l'image
+                      ),
+                    ),
+                  ),
+                  // Texte
+                  Positioned(
+                    left: i == 0 ? 42 : 34,
+                    top: 1484,
+                    child: Container(
+                      width: 156, // Largeur du texte
+                      height: 44, // Hauteur du texte
+                      child: Center(
+                        child: Text(
+                          personnageName[i], // Texte
+                          style: TextStyle(
+                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                            fontFamily: 'Nunito', // Police
+                            fontSize: 16, // Taille du texte
+                            fontWeight: FontWeight.normal, // Poids (Normal)
+                            fontStyle: FontStyle.normal, // Style de police
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
         ],
       ),
     );
   }
 }
+
 class AffichagePersonnagePart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

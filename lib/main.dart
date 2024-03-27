@@ -11,8 +11,6 @@ List<dynamic> popularSeriesImage = [];
 List<dynamic> popularIssuesName = [];
 List<dynamic> popularIssuesImage = [];
 
-/** PAS LES BONNES POLICES ! A CHANGER PLUS TARD */
-
 void main() async {
 
   const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
@@ -33,15 +31,16 @@ void main() async {
 
   runApp(const MyApp());
 }
+
 Future<void> searchMovies(String apiKey, String endpoint) async {
   final apiUrl = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&limit=4";
   final movies = await fetchData(apiUrl);
   for (final movie in movies) {
     print('Title: ${movie['name']}');
-    print('image: ${movie['image']['icon_url']}');
+    print('image: ${movie['image']['screen_large_url']}');
     print('---------------------');
     popularMoviesName.add(movie['name']);
-    popularMoviesImage.add(movie['image']['icon_url']);
+    popularMoviesImage.add(movie['image']['screen_large_url']);
   }
 }
 
@@ -50,10 +49,10 @@ Future<void> searchSeries(String apiKey, String endpoint) async {
   final series = await fetchData(apiUrl);
   for (final serie in series) {
     print('Title: ${serie['name']}');
-    print('image: ${serie['image']['icon_url']}');
+    print('image: ${serie['image']['screen_large_url']}');
     print('---------------------');
     popularSeriesName.add(serie['name']);
-    popularSeriesImage.add(serie['image']['icon_url']);
+    popularSeriesImage.add(serie['image']['screen_large_url']);
   }
 }
 
@@ -66,10 +65,10 @@ Future<void> searchIssues(String apiKey, String endpoint, List<String> issuesToS
       final issue = issues[0];
       if (issue['name'] != null) {
         print('Title: ${issue['name']}');
-        print('image: ${issue['image']['icon_url']}');
+        print('image: ${issue['image']['screen_large_url']}');
         print('---------------------');
         popularIssuesName.add(issue['name']);
-        popularIssuesImage.add(issue['image']['icon_url']);
+        popularIssuesImage.add(issue['image']['screen_large_url']);
       } else {
         print('Aucun titre disponible pour l\'issue: $issueName');
       }

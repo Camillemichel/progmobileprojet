@@ -118,7 +118,6 @@ class RecherchePage extends StatelessWidget {
                 height: 97, // Hauteur de l'image
               ),
             ),
-
         ]),
       ),
         bottomNavigationBar: CustomBottomNavigationBar(),
@@ -473,41 +472,41 @@ Future<void> Recherche(BuildContext context, String query) async {
   print('Films :');
   for (var movie in movies) {
     print('Titre: ${movie['name']}');
-    print('Image: ${movie['image']['icon_url']}');
+    print('Image: ${movie['image']['screen_large_url']}');
     print('---------------------');
 
     moviesName.add(movie['name']);
-    moviesImage.add(movie['image']['icon_url']);
+    moviesImage.add(movie['image']['screen_large_url']);
   }
 
   print('Séries :');
   for (var serie in series) {
     print('Titre: ${serie['name']}');
-    print('Image: ${serie['image']['icon_url']}');
+    print('Image: ${serie['image']['screen_large_url']}');
     print('---------------------');
 
     seriesName.add(serie['name']);
-    seriesImage.add(serie['image']['icon_url']);
+    seriesImage.add(serie['image']['screen_large_url']);
   }
 
   print('Issues :');
   for (var issue in issues) {
     print('Titre: ${issue['name']}');
-    print('Image: ${issue['image']['icon_url']}');
+    print('Image: ${issue['image']['screen_large_url']}');
     print('---------------------');
 
     issuesName.add(issue['name']);
-    issuesImage.add(issue['image']['icon_url']);
+    issuesImage.add(issue['image']['screen_large_url']);
   }
 
   print('Personnages :');
   for (var perso in personnages) {
     print('Titre: ${perso['name']}');
-    print('Image: ${perso['image']['icon_url']}');
+    print('Image: ${perso['image']['screen_large_url']}');
     print('---------------------');
 
     personnageName.add(perso['name']);
-    personnageImage.add(perso['image']['icon_url']);
+    personnageImage.add(perso['image']['screen_large_url']);
   }
 
   // Après avoir obtenu les résultats de la recherche, on les affiches sur la page de résultats

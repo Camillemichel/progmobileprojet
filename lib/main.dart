@@ -152,10 +152,6 @@ class AcceuilPage extends StatelessWidget {
                               ),
                             ),
                           ),
-                          /** RECTANGLE SERIES POPULAIRES*/
-                          PopularSeriesPart(),
-                          /**SERIE POPULAIRE */
-                          PopularSeriesSection(),
                           /** LOGO */
                           Positioned(
                             left: 244, // Position X de l'image
@@ -166,6 +162,10 @@ class AcceuilPage extends StatelessWidget {
                               height: 159.68, // Hauteur de l'image
                             ),
                           ),
+                          /** RECTANGLE SERIES POPULAIRES*/
+                          PopularSeriesPart(),
+                          /**SERIE POPULAIRE */
+                          PopularSeriesSection(),
                           /** Rectangle COMICS POPULAIRES */
                           PopularComicsPart(),
                           /** COMICS POPULAIRES */
@@ -333,7 +333,6 @@ class PopularSeriesSection extends StatelessWidget {
     );
   }
 }
-
 class PopularComicsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -392,7 +391,6 @@ class PopularComicsSection extends StatelessWidget {
     );
   }
 }
-
 class PopularMoviesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -451,7 +449,6 @@ class PopularMoviesSection extends StatelessWidget {
     );
   }
 }
-
 class PopularSeriesPart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -628,7 +625,6 @@ class PopularMoviesPart extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
         children: [
-
           Positioned(
             left: 9, // Position X du rectangle
             top: 809, // Position Y du rectangle

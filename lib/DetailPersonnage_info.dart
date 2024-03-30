@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:progmobileprojet/RecherchePage.dart';
 import 'DetailPersonnage_histoire.dart';
-import 'main.dart';
 
 void main() async {
 
@@ -222,7 +220,8 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
 
     // Construct API URLs dynamically
     final apiUrls = fields.map((field) =>
-    "https://comicvine.gamespot.com/api/characters/?api_key=$apiKey&format=json&filter=name:$personnageName&field_list=$field").toList();
+    "https://comicvine.gamespot.com/api/characters/?api_key=$apiKey&format=json&filter=name:$personnageName&field_list=$field")
+        .toList();
 
     for (final apiUrl in apiUrls) {
       try {
@@ -251,16 +250,18 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
                   value = value ?? "infos non disponibles";
                   break;
                 case 'publisher':
-                  value = value['name'] ?? "infos non disponibles" ;
+                  value = value['name'] ?? "infos non disponibles";
                   break;
                 case 'origin':
                   value = value['name'] ?? "infos non disponibles";
                   break;
                 case 'gender':
-                  value = value == 1 ? 'male' : 'female'; // Assuming 1 represents male
+                  value =
+                  value == 1 ? 'male' : 'female'; // Assuming 1 represents male
                   break;
                 case 'birth':
-                  value = value ?? "infos non disponibles"; // If null, set to "pas de donnée"
+                  value = value ??
+                      "infos non disponibles"; // If null, set to "pas de donnée"
                   break;
                 default:
                 // For other keys, keep the value as it is
@@ -353,6 +354,12 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
             ),
           ),
         ),
+        if (res.isEmpty) // Afficher le indicateur de chargement si res est vide
+          Positioned(
+            left: 200,
+            top: 200,
+            child: CircularProgressIndicator(),
+          ),
         for (int i = 0; i < Categorie.length; i++)
           Positioned(
             left: 23,
@@ -393,4 +400,3 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
     );
   }
 }
-

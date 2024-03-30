@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:progmobileprojet/RecherchePage.dart';
 import 'DetailPersonnage_info.dart';
-import 'main.dart';
 
 void main() async {
 

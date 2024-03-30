@@ -378,7 +378,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             child: NavigationIcon(
               iconPath: 'assets/navbar_search.svg',
               label: 'Recherche',
-              showHighlight: false, // Activez le surlignage pour l'icône de recherche
+              showHighlight: true, // Activez le surlignage pour l'icône de recherche
             ),
           ),
         ],

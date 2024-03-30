@@ -4,6 +4,9 @@ import 'RecherchePage.dart';
 import 'DetailPersonnage_histoire.dart';
 import 'DetailPersonnage_info.dart';
 import 'main.dart';
+import 'comics_page.dart';
+import 'movie_page.dart';
+import 'series_page.dart';
 
 class RecherchePage_Resultat extends StatelessWidget {
   final String query;
@@ -197,44 +200,68 @@ class SearchBar extends StatelessWidget {
     );
   }
 }
-
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
+      color: const Color.fromRGBO(15, 30, 43, 1),
+      // Couleur de fond de la barre de navigation
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
-        children:  [
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // Distribuer les icônes uniformément
+        children: [
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => AcceuilPage(title: "")
-                ),
+                MaterialPageRoute(builder: (context) => AcceuilPage(title: "")), // Navigate vers RecherchePage
               );
             },
             child: NavigationIcon(
               iconPath: 'assets/navbar_home.svg',
               label: 'Accueil',
+              showHighlight: false, // Seul l'élément "Accueil" aura le surlignage
+            ),
+          ),
+
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_books_bicolor.svg',
+              label: 'Comics',
               showHighlight: false,
             ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_books_bicolor.svg',
-            label: 'Comics',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_tv_bicolor.svg',
+              label: 'Séries',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_tv_bicolor.svg',
-            label: 'Séries',
-            showHighlight: false,
-          ),
-          NavigationIcon(
-            iconPath: 'assets/ic_movie_bicolor.svg',
-            label: 'Films',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers MoviesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_movie_bicolor.svg',
+              label: 'Films',
+              showHighlight: false,
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -305,6 +332,7 @@ class NavigationIcon extends StatelessWidget {
     );
   }
 }
+
 class AffichageResultatComics extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

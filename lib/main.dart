@@ -176,39 +176,64 @@ class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
+      color: const Color.fromRGBO(15, 30, 43, 1),
+      // Couleur de fond de la barre de navigation
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
-        children:  [
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // Distribuer les icônes uniformément
+        children: [
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => AcceuilPage(title: "")
-                ),
+                MaterialPageRoute(builder: (context) => AcceuilPage(title: "")), // Navigate vers RecherchePage
               );
             },
             child: NavigationIcon(
               iconPath: 'assets/navbar_home.svg',
               label: 'Accueil',
-              showHighlight: true,
+              showHighlight: true, // Seul l'élément "Accueil" aura le surlignage
             ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_books_bicolor.svg',
-            label: 'Comics',
-            showHighlight: false,
+
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_books_bicolor.svg',
+              label: 'Comics',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_tv_bicolor.svg',
-            label: 'Séries',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_tv_bicolor.svg',
+              label: 'Séries',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_movie_bicolor.svg',
-            label: 'Films',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers MoviesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_movie_bicolor.svg',
+              label: 'Films',
+              showHighlight: false,
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -229,6 +254,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 }
+
 class NavigationIcon extends StatelessWidget {
   final String iconPath;
   final String label;
@@ -278,6 +304,7 @@ class NavigationIcon extends StatelessWidget {
     );
   }
 }
+
 class PopularSeriesSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

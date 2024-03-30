@@ -20,29 +20,6 @@ List<dynamic> seriesImage = [];
 List<dynamic> issuesImage = [];
 List<dynamic> personnageImage=[];
 
-void main() async {
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Projet programmation mobile',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          background: const Color(0xFF15232E), // Couleur de fond
-        ),
-        useMaterial3: true,
-      ),
-      home: RecherchePage(title:""),
-    );
-  }
-}
-
 class RecherchePage extends StatelessWidget {
   RecherchePage({Key? key, required String title}) : super(key: key);
 

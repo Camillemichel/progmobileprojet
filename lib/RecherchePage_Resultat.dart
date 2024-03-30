@@ -5,29 +5,6 @@ import 'DetailPersonnage_histoire.dart';
 import 'DetailPersonnage_info.dart';
 import 'main.dart';
 
-void main() async {
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Projet programmation mobile',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          background: const Color(0xFF15232E), // Couleur de fond
-        ),
-        useMaterial3: true,
-      ),
-      home: RecherchePage_Resultat(query:"",moviesName:[],seriesName:[],issuesName:[],personnageName: [],moviesImage:[],seriesImage:[],issuesImage:[],personnageImage: [],),
-    );
-  }
-}
-
 class RecherchePage_Resultat extends StatelessWidget {
   final String query;
   final List<dynamic> moviesName; // le tableau de noms de films

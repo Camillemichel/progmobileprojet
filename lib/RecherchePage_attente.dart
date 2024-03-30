@@ -1,28 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-void main() async {
-
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Projet programmation mobile',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          background: const Color(0xFF15232E), // Couleur de fond
-        ),
-        useMaterial3: true,
-      ),
-      home: RecherchePage_attente(query:""),
-    );
-  }
-}
 class RecherchePage_attente extends StatelessWidget {
 
   final String query;

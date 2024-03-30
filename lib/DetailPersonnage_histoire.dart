@@ -5,30 +5,6 @@ import 'package:http/http.dart' as http;
 import 'DetailPersonnage_info.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
-void main() async {
-
-    runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Projet programmation mobile',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch().copyWith(
-          background: const Color(0xFF15232E), // Couleur de fond
-        ),
-        useMaterial3: true,
-      ),
-      home: DetailPersonnage_histoire(personnagesName: "",personnagesImage: ""),
-    );
-  }
-}
-
 class DetailPersonnage_histoire extends StatelessWidget {
   final String personnagesName;
   final String personnagesImage;

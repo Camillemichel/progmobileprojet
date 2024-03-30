@@ -102,10 +102,8 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
 class AcceuilPage extends StatelessWidget {
   AcceuilPage({Key? key, required String title}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -115,116 +113,102 @@ class AcceuilPage extends StatelessWidget {
         elevation: 0, // Supprimer l'ombre de la barre
       ),
       body: SingleChildScrollView(
-              child: Container(
-                      width: 375,
-                      height: 1229,
-                      color: Theme.of(context).colorScheme.background,
-                      child: Stack(
-                        children: [
-                          /** BIENVENUE !*/
-                          Positioned(
-                            left: 32, // Position X du texte
-                            top: 34, // Position Y du texte
-                            child: Container(
-                              width: 187, // Largeur du texte
-                              height: 41, // Hauteur du texte
-                              child: Center(
-                                child: Text(
-                                  "BIENVENUE !", // Texte
-                                  style: TextStyle(
-                                    color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                                    fontFamily: 'Nunito', // Police
-                                    fontSize: 30, // Taille du texte
-                                    fontWeight: FontWeight.bold, // Poids (Bold)
-                                    fontStyle: FontStyle.normal, // Style de police
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          /** LOGO */
-                          Positioned(
-                            left: 244, // Position X de l'image
-                            top: 16, // Position Y de l'image
-                            child: SvgPicture.asset(
-                              'assets/astronaut.svg', // Chemin vers l'image SVG
-                              width: 121.85, // Largeur de l'image
-                              height: 159.68, // Hauteur de l'image
-                            ),
-                          ),
-                          /** RECTANGLE SERIES POPULAIRES*/
-                          PopularSeriesPart(),
-                          /**SERIE POPULAIRE */
-                          PopularSeriesSection(),
-                          /** Rectangle COMICS POPULAIRES */
-                          PopularComicsPart(),
-                          /** COMICS POPULAIRES */
-                          PopularComicsSection(),
-                          /** Rectangle FILMS POPULAIRES*/
-                          PopularMoviesPart(),
-                          /** FILMS POPULAIRES */
-                          PopularMoviesSection(),
-                        ],
+        child: Container(
+          width: 375,
+          height: 1229,
+          color: Theme.of(context).colorScheme.background,
+          child: Stack(
+            children: [
+              /** BIENVENUE !*/
+              Positioned(
+                left: 32, // Position X du texte
+                top: 34, // Position Y du texte
+                child: Container(
+                  width: 187, // Largeur du texte
+                  height: 41, // Hauteur du texte
+                  child: Center(
+                    child: Text(
+                      "BIENVENUE !", // Texte
+                      style: TextStyle(
+                        color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                        fontFamily: 'Nunito', // Police
+                        fontSize: 30, // Taille du texte
+                        fontWeight: FontWeight.bold, // Poids (Bold)
+                        fontStyle: FontStyle.normal, // Style de police
                       ),
+                    ),
+                  ),
+                ),
               ),
+              /** LOGO */
+              Positioned(
+                left: 244, // Position X de l'image
+                top: 16, // Position Y de l'image
+                child: SvgPicture.asset(
+                  'assets/astronaut.svg', // Chemin vers l'image SVG
+                  width: 121.85, // Largeur de l'image
+                  height: 159.68, // Hauteur de l'image
+                ),
+              ),
+              /** RECTANGLE SERIES POPULAIRES*/
+              PopularSeriesPart(),
+              /**SERIE POPULAIRE */
+              PopularSeriesSection(),
+              /** Rectangle COMICS POPULAIRES */
+              PopularComicsPart(),
+              /** COMICS POPULAIRES */
+              PopularComicsSection(),
+              /** Rectangle FILMS POPULAIRES*/
+              PopularMoviesPart(),
+              /** FILMS POPULAIRES */
+              PopularMoviesSection(),
+            ],
+          ),
+        ),
       ),
       bottomNavigationBar: CustomBottomNavigationBar(),
+
     );
   }
 }
+
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(15, 30, 43, 1),
-      // Couleur de fond de la barre de navigation
+      color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        // Distribuer les icônes uniformément
-        children: [
+        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
+        children:  [
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AcceuilPage(title: "")
+                ),
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/navbar_home.svg',
+              label: 'Accueil',
+              showHighlight: true,
+            ),
+          ),
           NavigationIcon(
-            iconPath: 'assets/navbar_home.svg',
-            label: 'Accueil',
-            showHighlight: true, // Seul l'élément "Accueil" aura le surlignage
+            iconPath: 'assets/ic_books_bicolor.svg',
+            label: 'Comics',
+            showHighlight: false,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
-              );
-            },
-            child: NavigationIcon(
-              iconPath: 'assets/ic_books_bicolor.svg',
-              label: 'Comics',
-              showHighlight: false,
-            ),
+          NavigationIcon(
+            iconPath: 'assets/ic_tv_bicolor.svg',
+            label: 'Séries',
+            showHighlight: false,
           ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
-              );
-            },
-            child: NavigationIcon(
-              iconPath: 'assets/ic_tv_bicolor.svg',
-              label: 'Séries',
-              showHighlight: false,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers MoviesPage
-              );
-            },
-            child: NavigationIcon(
-              iconPath: 'assets/ic_movie_bicolor.svg',
-              label: 'Films',
-              showHighlight: false,
-            ),
+          NavigationIcon(
+            iconPath: 'assets/ic_movie_bicolor.svg',
+            label: 'Films',
+            showHighlight: false,
           ),
           GestureDetector(
             onTap: () {
@@ -245,7 +229,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
     );
   }
 }
-
 class NavigationIcon extends StatelessWidget {
   final String iconPath;
   final String label;
@@ -265,22 +248,28 @@ class NavigationIcon extends StatelessWidget {
       children: [
         Container(
           decoration: showHighlight ? BoxDecoration(
-            color: const Color.fromRGBO(55, 146, 255, 0.2), // Couleur de fond pour l'élément mis en évidence
+            color: const Color.fromRGBO(55, 146, 255, 0.2),
+            // Couleur de fond pour l'élément mis en évidence
             borderRadius: BorderRadius.circular(18), // Bordure arrondie
           ) : null,
-          padding: showHighlight ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8) : null,
+          padding: showHighlight ? const EdgeInsets.symmetric(
+              horizontal: 12, vertical: 8) : null,
           child: SvgPicture.asset(
             iconPath,
             width: 24,
             height: 24,
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
           ),
         ),
         const SizedBox(height: 8), // Espace constant entre l'icône et le texte
         Text(
           label,
           style: TextStyle(
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
             fontSize: 12,
             fontFamily: 'Nunito',
           ),

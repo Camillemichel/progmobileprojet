@@ -3,6 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'RecherchePage.dart';
+import 'comics_page.dart';
+import 'movie_page.dart';
+import 'series_page.dart';
 
 List<dynamic> popularMoviesName = [];
 List<dynamic> popularMoviesImage = [];
@@ -16,7 +19,7 @@ void main() async {
   const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
   const endpointMovies = 'movies';
   const endpointSeries = 'series_list';
-  const endpointIssues = 'issues';
+  const endpointIssues = 'volumes';
 
   print('Recherche des films :');
   await searchMovies(apiKey, endpointMovies);
@@ -24,10 +27,8 @@ void main() async {
   print('\nRecherche des séries :');
   await searchSeries(apiKey, endpointSeries);
 
-  final List<String> issuesToSearch = ['In the Hands of ... Mephisto!', 'Home', 'Batman in Bethlehem', '"The Black Issue"'];
-
   print('\nRecherche des issues :');
-  await searchIssues(apiKey, endpointIssues, issuesToSearch);
+  await searchIssues(apiKey, endpointIssues);
 
   runApp(const MyApp());
 }
@@ -37,10 +38,10 @@ Future<void> searchMovies(String apiKey, String endpoint) async {
   final movies = await fetchData(apiUrl);
   for (final movie in movies) {
     print('Title: ${movie['name']}');
-    print('image: ${movie['image']['screen_large_url']}');
+    print('image: ${movie['image']['medium_url']}');
     print('---------------------');
     popularMoviesName.add(movie['name']);
-    popularMoviesImage.add(movie['image']['screen_large_url']);
+    popularMoviesImage.add(movie['image']['medium_url']);
   }
 }
 
@@ -49,35 +50,24 @@ Future<void> searchSeries(String apiKey, String endpoint) async {
   final series = await fetchData(apiUrl);
   for (final serie in series) {
     print('Title: ${serie['name']}');
-    print('image: ${serie['image']['screen_large_url']}');
+    print('image: ${serie['image']['medium_large_url']}');
     print('---------------------');
     popularSeriesName.add(serie['name']);
-    popularSeriesImage.add(serie['image']['screen_large_url']);
+    popularSeriesImage.add(serie['image']['medium_url']);
   }
 }
 
-Future<void> searchIssues(String apiKey, String endpoint, List<String> issuesToSearch) async {
-  for (final issueName in issuesToSearch) {
-    final apiUrlIssue = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&limit=1&filter=name:${issueName}";
-
-    final issues = await fetchData(apiUrlIssue);
-    if (issues.isNotEmpty) {
-      final issue = issues[0];
-      if (issue['name'] != null) {
-        print('Title: ${issue['name']}');
-        print('image: ${issue['image']['screen_large_url']}');
-        print('---------------------');
-        popularIssuesName.add(issue['name']);
-        popularIssuesImage.add(issue['image']['screen_large_url']);
-      } else {
-        print('Aucun titre disponible pour l\'issue: $issueName');
-      }
-    } else {
-      print('Aucun issue trouvé pour: $issueName');
-    }
+Future<void> searchIssues(String apiKey, String endpoint) async {
+  final apiUrl = "https://comicvine.gamespot.com/api/${endpoint}?api_key=${apiKey}&format=json&limit=4";
+  final issues = await fetchData(apiUrl);
+  for (final issue in issues) {
+    print('Title: ${issue['name']}');
+    print('image: ${issue['image']['screen_large_url']}');
+    print('---------------------');
+    popularIssuesName.add(issue['name']);
+    popularIssuesImage.add(issue['image']['medium_url']);
   }
 }
-
 Future<List<dynamic>> fetchData(String apiUrl) async {
   List<dynamic> list = [];
 
@@ -197,20 +187,44 @@ class CustomBottomNavigationBar extends StatelessWidget {
             label: 'Accueil',
             showHighlight: true, // Seul l'élément "Accueil" aura le surlignage
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_books_bicolor.svg',
-            label: 'Comics',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_books_bicolor.svg',
+              label: 'Comics',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_tv_bicolor.svg',
-            label: 'Séries',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_tv_bicolor.svg',
+              label: 'Séries',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_movie_bicolor.svg',
-            label: 'Films',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers MoviesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_movie_bicolor.svg',
+              label: 'Films',
+              showHighlight: false,
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -466,18 +480,31 @@ class PopularSeriesPart extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 272, // Position X du rectangle
-            top: 140, // Position Y du rectangle
-            child: Container(
-              width: 92, // Largeur du rectangle
-              height: 32, // Hauteur du rectangle
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
+              );
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 272, // Position X du rectangle
+                  top: 140, // Position Y du rectangle
+                  child: Container(
+                    width: 92, // Largeur du rectangle
+                    height: 32, // Hauteur du rectangle
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Bordure arrondie
+                      color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
           Positioned(
             left: 26, // Position X du rond
             top: 142, // Position Y du rond
@@ -583,16 +610,28 @@ class PopularComicsPart extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 274, // Position X du rectangle
-            top: 474, // Position Y du rectangle
-            child: Container(
-              width: 92, // Largeur du rectangle
-              height: 32, // Hauteur du rectangle
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
+              );
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 274, // Position X du rectangle
+                  top: 474, // Position Y du rectangle
+                  child: Container(
+                    width: 92, // Largeur du rectangle
+                    height: 32, // Hauteur du rectangle
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Bordure arrondie
+                      color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Positioned(
@@ -669,16 +708,28 @@ class PopularMoviesPart extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            left: 274, // Position X du rectangle
-            top: 831, // Position Y du rectangle
-            child: Container(
-              width: 92, // Largeur du rectangle
-              height: 32, // Hauteur du rectangle
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10), // Bordure arrondie
-                color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
-              ),
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers comics_page
+              );
+            },
+            child: Stack(
+              children: [
+                Positioned(
+                  left: 274, // Position X du rectangle
+                  top: 831, // Position Y du rectangle
+                  child: Container(
+                    width: 92, // Largeur du rectangle
+                    height: 32, // Hauteur du rectangle
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Bordure arrondie
+                      color: const Color.fromRGBO(0, 0, 0, 0.5), // Couleur du fond
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           Positioned(

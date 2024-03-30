@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'DetailPersonnage_info.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 void main() async {
 
@@ -235,9 +236,7 @@ class PersonnageHistoire extends StatelessWidget {
                     } else if (snapshot.hasError) {
                       return Text('Erreur: ${snapshot.error}');
                     } else if (snapshot.hasData) {
-                      return Text(
-                        (snapshot.data?? 'Aucune histoire disponible').toString() ,
-                      );
+                      return HtmlWidget(snapshot.data ?? 'Aucune histoire disponible');
                     } else {
                       return Text('Aucune donnée disponible');
                     }

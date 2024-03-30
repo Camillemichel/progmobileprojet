@@ -335,60 +335,79 @@ class AffichageResultatComics extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (int i = 0; i < issuesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 600), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+          if (issuesName.isEmpty)
+            Container(
+              margin: EdgeInsets.only(left: 70, top: 696.5),
+              width: 250, // Largeur du texte
+              height: 44, // Hauteur du texte
+              child: Center(
+                child: Text(
+                  "Aucun résultat trouvé",
+                  style: TextStyle(
+                    color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                    fontFamily: 'Nunito', // Police
+                    fontSize: 22, // Taille du texte
+                    fontWeight: FontWeight.normal, // Poids (Normal)
+                    fontStyle: FontStyle.normal, // Style de police
                   ),
                 ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 31 : 10,
-                  top: 600,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      issuesImage[i], // URL de l'image
+              ),
+            )
+          else
+            for (int i = 0; i < issuesName.length; i++)
+              Stack(
+                children: [
+                  // Rectangle
+                  Container(
+                    margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 600), // Marge gauche
+                    width: 180,
+                    height: 242,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Coins arrondis
+                      color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                     ),
                   ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 42 : 34,
-                  top: 789,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        issuesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
+                  //Image
+                  Positioned(
+                    left: i == 0 ? 31 : 10,
+                    top: 600,
+                    child: Container(
+                      width: 180, // Largeur de l'image
+                      height: 177, // Hauteur de l'image
+                      child: Image.network(
+                        issuesImage[i], // URL de l'image
+                      ),
+                    ),
+                  ),
+                  // Texte
+                  Positioned(
+                    left: i == 0 ? 42 : 34,
+                    top: 789,
+                    child: Container(
+                      width: 156, // Largeur du texte
+                      height: 44, // Hauteur du texte
+                      child: Center(
+                        child: Text(
+                          issuesName[i], // Texte
+                          style: TextStyle(
+                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                            fontFamily: 'Nunito', // Police
+                            fontSize: 16, // Taille du texte
+                            fontWeight: FontWeight.normal, // Poids (Normal)
+                            fontStyle: FontStyle.normal, // Style de police
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
         ],
       ),
     );
-
   }
 }
+
 
 class AffichageComicsPart extends StatelessWidget {
   @override
@@ -444,7 +463,6 @@ class AffichageComicsPart extends StatelessWidget {
     );
   }
 }
-
 class AffichageResultatSeries extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -452,54 +470,73 @@ class AffichageResultatSeries extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (int i = 0; i < seriesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 251), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+          if (seriesName.isEmpty)
+            Container(
+              margin: EdgeInsets.only(left: 70, top: 347.5),
+              width: 250, // Largeur du texte
+              height: 44, // Hauteur du texte
+              child: Center(
+                child: Text(
+                  "Aucun résultat trouvé",
+                  style: TextStyle(
+                    color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                    fontFamily: 'Nunito', // Police
+                    fontSize: 22, // Taille du texte
+                    fontWeight: FontWeight.normal, // Poids (Normal)
+                    fontStyle: FontStyle.normal, // Style de police
                   ),
                 ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 31 : 10,
-                  top: 251,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      seriesImage[i], // URL de l'image
+              ),
+            )
+          else
+            for (int i = 0; i < seriesName.length; i++)
+              Stack(
+                children: [
+                  // Rectangle
+                  Container(
+                    margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 251), // Marge gauche
+                    width: 180,
+                    height: 242,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Coins arrondis
+                      color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                     ),
                   ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 42 : 34,
-                  top: 440,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        seriesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
+                  //Image
+                  Positioned(
+                    left: i == 0 ? 31 : 10,
+                    top: 251,
+                    child: Container(
+                      width: 180, // Largeur de l'image
+                      height: 177, // Hauteur de l'image
+                      child: Image.network(
+                        seriesImage[i], // URL de l'image
+                      ),
+                    ),
+                  ),
+                  // Texte
+                  Positioned(
+                    left: i == 0 ? 42 : 34,
+                    top: 440,
+                    child: Container(
+                      width: 156, // Largeur du texte
+                      height: 44, // Hauteur du texte
+                      child: Center(
+                        child: Text(
+                          seriesName[i], // Texte
+                          style: TextStyle(
+                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                            fontFamily: 'Nunito', // Police
+                            fontSize: 16, // Taille du texte
+                            fontWeight: FontWeight.normal, // Poids (Normal)
+                            fontStyle: FontStyle.normal, // Style de police
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
         ],
       ),
     );
@@ -567,54 +604,73 @@ class AffichageResultatMovies extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          for (int i = 0; i < moviesName.length; i++)
-            Stack(
-              children: [
-                // Rectangle
-                Container(
-                  margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 946), // Marge gauche
-                  width: 180,
-                  height: 242,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10), // Coins arrondis
-                    color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
+          if (moviesName.isEmpty)
+            Container(
+              margin: EdgeInsets.only(left: 70, top: 1042.5),
+              width: 250, // Largeur du texte
+              height: 44, // Hauteur du texte
+              child: Center(
+                child: Text(
+                  "Aucun résultat trouvé",
+                  style: TextStyle(
+                    color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                    fontFamily: 'Nunito', // Police
+                    fontSize: 22, // Taille du texte
+                    fontWeight: FontWeight.normal, // Poids (Normal)
+                    fontStyle: FontStyle.normal, // Style de police
                   ),
                 ),
-                //Image
-                Positioned(
-                  left: i == 0 ? 31 : 10,
-                  top: 946,
-                  child: Container(
-                    width: 180, // Largeur de l'image
-                    height: 177, // Hauteur de l'image
-                    child: Image.network(
-                      moviesImage[i], // URL de l'image
+              ),
+            )
+          else
+            for (int i = 0; i < moviesName.length; i++)
+              Stack(
+                children: [
+                  // Rectangle
+                  Container(
+                    margin: EdgeInsets.only(left: i == 0 ? 31 : 10, top: 946), // Marge gauche
+                    width: 180,
+                    height: 242,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10), // Coins arrondis
+                      color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                     ),
                   ),
-                ),
-                // Texte
-                Positioned(
-                  left: i == 0 ? 42 : 34,
-                  top: 1135,
-                  child: Container(
-                    width: 156, // Largeur du texte
-                    height: 44, // Hauteur du texte
-                    child: Center(
-                      child: Text(
-                        moviesName[i], // Texte
-                        style: TextStyle(
-                          color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
-                          fontFamily: 'Nunito', // Police
-                          fontSize: 16, // Taille du texte
-                          fontWeight: FontWeight.normal, // Poids (Normal)
-                          fontStyle: FontStyle.normal, // Style de police
+                  //Image
+                  Positioned(
+                    left: i == 0 ? 31 : 10,
+                    top: 946,
+                    child: Container(
+                      width: 180, // Largeur de l'image
+                      height: 177, // Hauteur de l'image
+                      child: Image.network(
+                        moviesImage[i], // URL de l'image
+                      ),
+                    ),
+                  ),
+                  // Texte
+                  Positioned(
+                    left: i == 0 ? 42 : 34,
+                    top: 1135,
+                    child: Container(
+                      width: 156, // Largeur du texte
+                      height: 44, // Hauteur du texte
+                      child: Center(
+                        child: Text(
+                          moviesName[i], // Texte
+                          style: TextStyle(
+                            color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                            fontFamily: 'Nunito', // Police
+                            fontSize: 16, // Taille du texte
+                            fontWeight: FontWeight.normal, // Poids (Normal)
+                            fontStyle: FontStyle.normal, // Style de police
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
         ],
       ),
     );
@@ -680,7 +736,6 @@ class AffichageMoviesPart extends StatelessWidget {
     );
   }
 }
-
 class AffichageResultatPersonnage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -688,15 +743,27 @@ class AffichageResultatPersonnage extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
+          if (moviesName.isEmpty)
+            Container(
+              margin: EdgeInsets.only(left: 70, top: 1391.5),
+              width: 250, // Largeur du texte
+              height: 44, // Hauteur du texte
+              child: Center(
+                child: Text(
+                  "Aucun résultat trouvé",
+                  style: TextStyle(
+                    color: const Color.fromRGBO(255, 255, 255, 1), // Couleur du texte
+                    fontFamily: 'Nunito', // Police
+                    fontSize: 22, // Taille du texte
+                    fontWeight: FontWeight.normal, // Poids (Normal)
+                    fontStyle: FontStyle.normal, // Style de police
+                  ),
+                ),
+              ),
+            )
+          else
           for (int i = 0; i < personnageName.length; i++)
-            GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => DetailPersonnage_histoire(personnagesName: personnageName[i],personnagesImage: personnageImage[i])),
-                );
-              },
-              child: Stack(
+              Stack(
                 children: [
                   // Rectangle
                   Container(
@@ -742,7 +809,6 @@ class AffichageResultatPersonnage extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
             ),
         ],
       ),

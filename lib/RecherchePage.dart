@@ -5,6 +5,9 @@ import 'package:http/http.dart' as http;
 import 'RecherchePage_attente.dart';
 import 'RecherchePage_Resultat.dart';
 import 'main.dart';
+import 'comics_page.dart';
+import 'movie_page.dart';
+import 'series_page.dart';
 
 // Tableaux pour stocker les résultats
 List<dynamic> moviesName = [];
@@ -329,43 +332,69 @@ class _SearchBarState extends State<SearchBar> {
   }
 }
 
+
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color.fromRGBO(15, 30, 43, 1), // Couleur de fond de la barre de navigation
+      color: const Color.fromRGBO(15, 30, 43, 1),
+      // Couleur de fond de la barre de navigation
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround, // Distribuer les icônes uniformément
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        // Distribuer les icônes uniformément
         children: [
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>
-                    AcceuilPage(title:"")
-                ), // Navigate vers PageAccueil
+                MaterialPageRoute(builder: (context) => AcceuilPage(title: "")), // Navigate vers RecherchePage
               );
             },
             child: NavigationIcon(
               iconPath: 'assets/navbar_home.svg',
               label: 'Accueil',
-              showHighlight: false, // Activez le surlignage pour l'icône de recherche
+              showHighlight: false, // Seul l'élément "Accueil" aura le surlignage
             ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_books_bicolor.svg',
-            label: 'Comics',
-            showHighlight: false,
+
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => comics_page()), // Navigate vers comics_page
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_books_bicolor.svg',
+              label: 'Comics',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_tv_bicolor.svg',
-            label: 'Séries',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => SeriesPage()), // Navigate vers SeriesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_tv_bicolor.svg',
+              label: 'Séries',
+              showHighlight: false,
+            ),
           ),
-          NavigationIcon(
-            iconPath: 'assets/ic_movie_bicolor.svg',
-            label: 'Films',
-            showHighlight: false,
+          GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MoviesPage()), // Navigate vers MoviesPage
+              );
+            },
+            child: NavigationIcon(
+              iconPath: 'assets/ic_movie_bicolor.svg',
+              label: 'Films',
+              showHighlight: false,
+            ),
           ),
           GestureDetector(
             onTap: () {
@@ -472,41 +501,41 @@ Future<void> Recherche(BuildContext context, String query) async {
   print('Films :');
   for (var movie in movies) {
     print('Titre: ${movie['name']}');
-    print('Image: ${movie['image']['screen_large_url']}');
+    print('Image: ${movie['image']['medium_url']}');
     print('---------------------');
 
     moviesName.add(movie['name']);
-    moviesImage.add(movie['image']['screen_large_url']);
+    moviesImage.add(movie['image']['medium_url']);
   }
 
   print('Séries :');
   for (var serie in series) {
     print('Titre: ${serie['name']}');
-    print('Image: ${serie['image']['screen_large_url']}');
+    print('Image: ${serie['image']['medium_url']}');
     print('---------------------');
 
     seriesName.add(serie['name']);
-    seriesImage.add(serie['image']['screen_large_url']);
+    seriesImage.add(serie['image']['medium_url']);
   }
 
   print('Issues :');
   for (var issue in issues) {
     print('Titre: ${issue['name']}');
-    print('Image: ${issue['image']['screen_large_url']}');
+    print('Image: ${issue['image']['medium_url']}');
     print('---------------------');
 
     issuesName.add(issue['name']);
-    issuesImage.add(issue['image']['screen_large_url']);
+    issuesImage.add(issue['image']['medium_url']);
   }
 
   print('Personnages :');
   for (var perso in personnages) {
     print('Titre: ${perso['name']}');
-    print('Image: ${perso['image']['screen_large_url']}');
+    print('Image: ${perso['image']['medium_url']}');
     print('---------------------');
 
     personnageName.add(perso['name']);
-    personnageImage.add(perso['image']['screen_large_url']);
+    personnageImage.add(perso['image']['medium_url']);
   }
 
   // Après avoir obtenu les résultats de la recherche, on les affiches sur la page de résultats

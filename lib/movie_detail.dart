@@ -7,7 +7,7 @@ import 'DetailPersonnage_histoire.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-List<dynamic> personnages = [];
+List<dynamic> personnageImage = [];
 
 class MovieDetailsPage extends StatefulWidget {
   final dynamic comic;

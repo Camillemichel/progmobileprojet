@@ -4,9 +4,9 @@ import '/movie_detail.dart';
 import '../api.dart';
 import 'main.dart';
 import 'RecherchePage.dart';
-import 'movie_page.dart';
 import 'series_page.dart';
 import 'comics_page.dart';
+
 
 class MoviesPage extends StatefulWidget {
   const MoviesPage({Key? key}) : super(key: key);
@@ -339,3 +339,4 @@ class NavigationIcon extends StatelessWidget {
     );
   }
 }
+

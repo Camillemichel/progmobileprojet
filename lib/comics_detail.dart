@@ -1,26 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import '../api.dart';
 import 'dart:ui';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'DetailPersonnage_histoire.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+List<dynamic>personnageImage=[];
 
 class ComicDetailsPage extends StatefulWidget {
   final dynamic comic;
-
   const ComicDetailsPage({Key? key, required this.comic}) : super(key: key);
-
   @override
   _ComicDetailsPageState createState() => _ComicDetailsPageState();
 }
 class _ComicDetailsPageState extends State<ComicDetailsPage> {
-  String selectedMenuItem = 'Description';
-
+  String selectedMenuItem = 'Histoire';
+  Map<String, dynamic> _serieData = {};
+  Map<String, dynamic> _episodeData = {};
+  @override
+  void initState() {
+    super.initState();
+    _fetchSerieData();
+  }
+  Future<void> _fetchSerieData() async {
+    try {
+      final api = ComicVineApi();
+      final data = await api.searchSerieByName(widget.comic['id']);
+      setState(() {
+        _serieData = data;
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
+  Future<void> _fetchEpisodeData(int id) async {
+    try {
+      final api = ComicVineApi();
+      final data = await api.searchComicsByName(id);
+      print("offefefezefefefeffefefekd");
+      setState(() {
+        _episodeData[id.toString()] = data; // Stock
+        print("TESTTT" + ":" + _episodeData['version']);
+      });
+    } catch (e) {
+      print(e);
+    }
+  }
   @override
   Widget build(BuildContext context) {
     final comic = widget.comic;
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -42,12 +71,10 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          // Background image with blur effect
           Image.network(
             comic['image']['small_url'],
             fit: BoxFit.cover,
           ),
-          // Blur effect
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -90,7 +117,7 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                                 ),
                                 const SizedBox(height: 4.0),
                                 Text(
-                                  'Année de sortie : ${comic['start_year'] ?? 'N/A'}',
+                                  '${comic['start_year']?.substring(0, 4) ?? 'N/A'}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -105,174 +132,184 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedMenuItem = 'Description';
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 16.0),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      bottom: 8.0,
-                      right: 16.0,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: selectedMenuItem == 'Description'
-                              ? Colors.orange
-                              : Colors.transparent,
-                          width: 4,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: selectedMenuItem == 'Description'
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedMenuItem = 'Auteurs';
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 16.0),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      bottom: 8.0,
-                      right: 16.0,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: selectedMenuItem == 'Auteurs'
-                              ? Colors.orange
-                              : Colors.transparent,
-                          width: 4,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Auteurs',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: selectedMenuItem == 'Auteurs'
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedMenuItem = 'Personnages';
-                    });
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.only(left: 16.0),
-                    padding: const EdgeInsets.only(
-                      left: 16.0,
-                      bottom: 8.0,
-                      right: 16.0,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: selectedMenuItem == 'Personnages'
-                              ? Colors.orange
-                              : Colors.transparent,
-                          width: 4,
-                        ),
-                      ),
-                    ),
-                    child: Text(
-                      'Personnages',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: selectedMenuItem == 'Personnages'
-                            ? Colors.white
-                            : Colors.white.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                ),
-                // Rectangle behind description
-                Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF1E3243),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
-                  padding: const EdgeInsets.only(
-                    top: 25.0,
-                    left: 27.0,
-                    bottom: 8.0,
-                    right: 27.0,
-                  ),
-                  child: selectedMenuItem == 'Description'
-                      ? HtmlWidget(
-                    comic['description'] ?? 'N/A',
-                  )
-                      : selectedMenuItem == 'Personnages'
-                      ? (comic['characters'] != null &&
-                      comic['characters'].length > 0)
-                      ? ListView.builder(
-                    itemCount: comic['characters'].length,
-                    itemBuilder: (context, index) {
-                      final character =
-                      comic['characters'][index];
-                      final image =  character['image']['small_url'];
-                      final image2 =  character['image']['large_url'];
-
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  DetailPersonnage_histoire(
-                                    personnagesName:
-                                    character['name'],
-                                    personnagesImage: image ?? ' ',
-                                    // Pass the image URL to the next page
-                                  ),
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedMenuItem = 'Histoire';
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 8.0, right: 16.0),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: selectedMenuItem == 'Histoire'
+                                  ? Colors.orange
+                                  : Colors.transparent,
+                              width: 4,
                             ),
-                          );
-                        },
-                        child: Stack(
-                          children: [
-                            Text(character['name'] ?? 'N/A',
-                                style:
-                                const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 17
-                                )),
-                          ],
+                          ),
                         ),
-                      );
-                    },
-                  )
-                      : const Text('Aucun personnage trouvé')
-                      : const Text(
-                    'Infos',
-                    style: TextStyle(color: Colors.white),
+                        child: Text(
+                          'Histoire',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: selectedMenuItem == 'Histoire'
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedMenuItem = 'Auteurs';
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 8.0, right: 16.0),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: selectedMenuItem == 'Auteurs'
+                                  ? Colors.orange
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Auteurs',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: selectedMenuItem == 'Auteurs'
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          selectedMenuItem = 'Personnages';
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(
+                            left: 16.0, bottom: 8.0, right: 16.0),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(
+                              color: selectedMenuItem == 'Personnages'
+                                  ? Colors.orange
+                                  : Colors.transparent,
+                              width: 4,
+                            ),
+                          ),
+                        ),
+                        child: Text(
+                          'Personnages',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: selectedMenuItem == 'Personnages'
+                                ? Colors.white
+                                : Colors.white.withOpacity(0.6),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height *
+                      0.7,
+                  width: MediaQuery.of(context).size.width,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: Color(0xFF1E3243),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
+                    ),
+                    padding: const EdgeInsets.only(
+                        top: 25.0, left: 27.0, bottom: 8.0, right: 27.0),
+                    child: selectedMenuItem == 'Histoire'
+                        ? HtmlWidget(
+                      _removeImageTags(comic['description']) ?? 'N/A',
+                      textStyle: TextStyle(
+                        color: Colors.white, // Couleur du texte en blanc
+                      ),
+                    )
+                        : selectedMenuItem == 'Auteurs'
+                        ? (_serieData['characters'] != null &&
+                        _serieData['characters'].length > 0)
+                        ? ListView.builder(
+                      itemCount: _serieData['characters'].length,
+                      itemBuilder: (context, index) {
+                        final character =
+                        _serieData['characters'][index];
+                        Recherche(character['name']);
+                        final image;
+                        if (personnageImage.length == 0)  image = " ";
+                        else image= personnageImage[personnageImage.length - 1];
+                        // Appel de la fonction Recherche
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPersonnage_histoire(
+                                  personnagesName: character['name'],
+                                  personnagesImage: image,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            character['name'] ?? 'N/A',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                        : const Text('Aucun personnage trouvé')
+                        : selectedMenuItem == 'Personnages'
+                        ? (_serieData['episodes'] != null &&
+                        _serieData['episodes'].length > 0)
+                        ? Expanded(
+                        child: ListView.builder(
+                        itemCount: _serieData['characters'].length,
+                        itemBuilder: (context, index) {
+                          final character =
+                          _serieData['characters'][index];
+                          return Text(character['name'] ?? 'N/A',
+                              style: const TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 17));
+                        },
+                      ),
+                    )
+                        : const Text('Aucun épisode trouvé')
+                        : const Text('Episodes',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
@@ -281,5 +318,43 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
         ],
       ),
     );
+  }
+  String _removeImageTags(String htmlString) {
+    RegExp exp = RegExp(r"<img[^>]*>");
+    return htmlString.replaceAll(exp, '');
+  }
+
+  Future<List<dynamic>> fetchData(String apiUrl) async {
+
+    List<dynamic> list = [];
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> results = data['results'];
+      if (results.isNotEmpty) {
+        list.addAll(results);
+      }
+    } else {
+      print('Erreur de requête: ${response.statusCode}');
+    }
+
+    return list;
+  }
+
+  Future<void> Recherche(String personnageName) async {
+    const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
+    const endpointPerso = 'characters';
+    final apiUrlPerso =
+        "https://comicvine.gamespot.com/api/${endpointPerso}?api_key=${apiKey}&format=json&limit=5&filter=name:${personnageName}";
+
+    List<dynamic> personnages = await fetchData(apiUrlPerso);
+
+    for (var perso in personnages) {
+      if (perso['name'] == personnageName) {
+        personnageImage.add(perso['image']['medium_url']);
+        break;
+      }
+    }
   }
 }

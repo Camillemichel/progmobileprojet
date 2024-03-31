@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'RecherchePage.dart';
 import 'DetailPersonnage_histoire.dart';
-import 'DetailPersonnage_info.dart';
 import 'main.dart';
 import 'comics_page.dart';
 import 'movie_page.dart';
@@ -780,15 +779,28 @@ class AffichageResultatPersonnage extends StatelessWidget {
                       color: const Color.fromRGBO(40, 76, 106, 1), // Couleur de fond
                     ),
                   ),
-                  //Image
+                  // Image
                   Positioned(
                     left: i == 0 ? 31 : 10,
                     top: 1295,
-                    child: Container(
-                      width: 180, // Largeur de l'image
-                      height: 177, // Hauteur de l'image
-                      child: Image.network(
-                        personnageImage[i], // URL de l'image
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => DetailPersonnage_histoire(
+                              personnagesName: personnageName[i],
+                              personnagesImage: personnageImage[i],
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 180, // Largeur de l'image
+                        height: 177, // Hauteur de l'image
+                        child: Image.network(
+                          personnageImage[i], // URL de l'image
+                        ),
                       ),
                     ),
                   ),

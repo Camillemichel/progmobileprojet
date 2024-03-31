@@ -521,7 +521,6 @@ class PopularSeriesPart extends StatelessWidget {
               ],
             ),
           ),
-
           Positioned(
             left: 26, // Position X du rond
             top: 142, // Position Y du rond

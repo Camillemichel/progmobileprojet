@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'package:progmobileprojet/RecherchePage.dart';
 import 'api.dart';
 import 'dart:ui';
+import 'DetailPersonnage_histoire.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+List<dynamic> personnages = [];
+
 class MovieDetailsPage extends StatefulWidget {
   final dynamic comic;
   const MovieDetailsPage({Key? key, required this.comic}) : super(key: key);
@@ -11,6 +18,7 @@ class MovieDetailsPage extends StatefulWidget {
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
   String selectedMenuItem = 'Synopsis';
   Map<String, dynamic> _movieData = {};
+
   @override
   void initState() {
     super.initState();
@@ -36,26 +44,41 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   List<String> _getWritersNames() {
+    if (_movieData == null || _movieData['writers'] == null) {
+      return ['N/A'];
+    }
+
     List<String> writers = [];
     for (var writer in _movieData['writers']) {
       writers.add(writer['name']);
     }
-    return writers;
+    return writers.isEmpty ? ['N/A'] : writers;
   }
+
   List<String> _getStudioNames() {
+    if (_movieData == null || _movieData['studios'] == null) {
+      return ['N/A'];
+    }
+
     List<String> studios = [];
     for (var studio in _movieData['studios']) {
       studios.add(studio['name']);
     }
-    return studios;
+    return studios.isEmpty ? ['N/A'] : studios;
   }
+
   List<String> _getProducerNames() {
+    if (_movieData == null || _movieData['producers'] == null) {
+      return ['N/A'];
+    }
+
     List<String> producers = [];
     for (var producer in _movieData['producers']) {
       producers.add(producer['name']);
     }
-    return producers;
+    return producers.isEmpty ? ['N/A'] : producers;
   }
+
   Future<void> _fetchMovieData() async {
     try {
       final api = ComicVineApi();
@@ -104,12 +127,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-// Background image with blur effect
           Image.network(
             comic['image']['small_url'],
             fit: BoxFit.cover,
           ),
-// Blur effect
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -267,10 +288,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     ),
                   ],
                 ),
-// Rectangle behind description
                 SizedBox(
-                  height: MediaQuery.of(context).size.height *
-                      0.7, // ou toute autre hauteur souhaitée
+                  height: MediaQuery.of(context).size.height, // ou toute autre hauteur souhaitée
                   width: MediaQuery.of(context).size.width,
                   child: Container(
                     decoration: const BoxDecoration(
@@ -283,9 +302,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     padding: const EdgeInsets.only(
                         top: 25.0, left: 27.0, bottom: 8.0, right: 27.0),
                     child: selectedMenuItem == 'Synopsis'
-                        ? Text(
-                      comic['description'] ?? 'N/A',
-                      style: TextStyle(color: Colors.white),
+                        ? HtmlWidget(
+                      _removeImageTags(comic['description'] ?? 'N/A'),
+                      textStyle: TextStyle(
+                        color: Colors.white, // Couleur du texte en blanc
+                      ),
                     )
                         : selectedMenuItem == 'Personnages'
                         ? (_movieData['characters'] != null &&
@@ -293,17 +314,36 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         ? ListView.builder(
                       itemCount: _movieData['characters'].length,
                       itemBuilder: (context, index) {
-                        final character =
-                        _movieData['characters'][index];
-                        return Text(character['name'] ?? 'N/A',
-                            style:
-                            const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 17
-                            ));
+                        final character = _movieData['characters'][index];
+                        Recherche(character['name']);
+                        final image;
+                        if (personnageImage.length == 0)  image = " ";
+                        else image= personnageImage[personnageImage.length - 1];
+                         // Appel de la fonction Recherche
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailPersonnage_histoire(
+                                  personnagesName: character['name'],
+                                  personnagesImage: image,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            character['name'] ?? 'N/A',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 17,
+                            ),
+                          ),
+                        );
                       },
                     )
+
                         : const Text('Aucun personnage trouvé')
                         : selectedMenuItem == 'Infos'
                         ? ListView(
@@ -329,4 +369,44 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       ),
     );
   }
+  String _removeImageTags(String htmlString) {
+    // Utilisez une expression régulière pour supprimer les balises d'images HTML
+    RegExp exp = RegExp(r"<img[^>]*>");
+    return htmlString.replaceAll(exp, '');
+  }
+
+  Future<List<dynamic>> fetchData(String apiUrl) async {
+
+    List<dynamic> list = [];
+    final response = await http.get(Uri.parse(apiUrl));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> results = data['results'];
+      if (results.isNotEmpty) {
+        list.addAll(results);
+      }
+    } else {
+      print('Erreur de requête: ${response.statusCode}');
+    }
+
+    return list;
+  }
+
+  Future<void> Recherche(String personnageName) async {
+    const apiKey = 'b912fd14613c0e92c4e7afe4733d855fb87679cc';
+    const endpointPerso = 'characters';
+    final apiUrlPerso =
+        "https://comicvine.gamespot.com/api/${endpointPerso}?api_key=${apiKey}&format=json&limit=5&filter=name:${personnageName}";
+
+    List<dynamic> personnages = await fetchData(apiUrlPerso);
+
+    for (var perso in personnages) {
+      if (perso['name'] == personnageName) {
+        personnageImage.add(perso['image']['medium_url']);
+        break;
+      }
+    }
+  }
 }
+

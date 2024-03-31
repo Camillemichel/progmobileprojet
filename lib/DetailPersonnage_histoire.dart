@@ -22,7 +22,7 @@ class DetailPersonnage_histoire extends StatelessWidget {
       body: SingleChildScrollView(
         child: Container(
           width: 375,
-          height: 3570,
+          height: 5000,
           color: Theme.of(context).colorScheme.background,
           child: Stack(
             children: [
@@ -103,8 +103,8 @@ class PersonnageImage extends StatelessWidget {
   final String personnagesImage;
 
   PersonnageImage({required this.personnagesImage});
-   @override
-   Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return Stack(
         children: [
           Positioned(
@@ -132,21 +132,21 @@ class PersonnageImage extends StatelessWidget {
               child: Image.network(
                 personnagesImage, // URL de l'image
               ),
-              ),
+            ),
           ),
           Positioned(
             left: 24,
             top: 28,
-           child: GestureDetector(
-            onTap: () {
-              Navigator.pop(context); // Retour en arrière lorsque l'image est tapée
-             },
-            child: SvgPicture.asset(
-              'assets/theicons.co.svg',
-              width: 12,
-              height: 18,
+            child: GestureDetector(
+              onTap: () {
+                Navigator.pop(context); // Retour en arrière lorsque l'image est tapée
+              },
+              child: SvgPicture.asset(
+                'assets/theicons.co.svg',
+                width: 12,
+                height: 18,
+              ),
             ),
-           ),
           ),
         ]
     );
@@ -178,28 +178,28 @@ class PersonnageHistoire extends StatelessWidget {
           ),
         ),
         Positioned(
-          left:54,
-          top:24,
-          child: Container(
-            width: 188,
-            height: 26,
-            child: Text(
-              personnageName,
-              style: TextStyle(
-                fontFamily: 'Nunito',
-                fontWeight: FontWeight.bold,
-                fontSize: 17,
-                color: Color.fromRGBO(255, 255, 255, 1),
-              ),
+            left:54,
+            top:24,
+            child: Container(
+                width: 188,
+                height: 26,
+                child: Text(
+                  personnageName,
+                  style: TextStyle(
+                    fontFamily: 'Nunito',
+                    fontWeight: FontWeight.bold,
+                    fontSize: 17,
+                    color: Color.fromRGBO(255, 255, 255, 1),
+                  ),
+                )
             )
-          )
         ),
         Positioned(
           left: 27,
           top: 132,
-          child: Container(
-            width: 321,
-            height: 3470,
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height, // ou toute autre hauteur souhaitée
+            width: 345,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -212,7 +212,11 @@ class PersonnageHistoire extends StatelessWidget {
                     } else if (snapshot.hasError) {
                       return Text('Erreur: ${snapshot.error}');
                     } else if (snapshot.hasData) {
-                      return HtmlWidget(snapshot.data ?? 'Aucune histoire disponible');
+                      return HtmlWidget(
+                          _removeImageTags(snapshot.data ?? 'N/A' ),
+                        textStyle: TextStyle(
+                          color: Colors.white, // Couleur du texte en blanc
+                        ),);
                     } else {
                       return Text('Aucune donnée disponible');
                     }
@@ -224,6 +228,11 @@ class PersonnageHistoire extends StatelessWidget {
         ),
       ],
     );
+  }
+  String _removeImageTags(String htmlString) {
+    // Utilisez une expression régulière pour supprimer les balises d'images HTML
+    RegExp exp = RegExp(r"<img[^>]*>");
+    return htmlString.replaceAll(exp, '');
   }
 
   Future<String?> fetchCharacterHistory(String personnageName) async {

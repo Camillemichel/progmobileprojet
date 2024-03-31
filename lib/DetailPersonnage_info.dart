@@ -37,10 +37,7 @@ class DetailPersonnage_Infos extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailPersonnage_histoire(
-                            personnagesName: personnagesName,
-                            personnagesImage: personnagesImage,
-                          ),
+                          builder: (context) => DetailPersonnage_histoire(personnagesName: personnagesName,personnagesImage: personnagesImage                          ),
                         ),
                       );
                     },

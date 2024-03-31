@@ -1,88 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'api.dart';
+import '../api.dart';
 import 'dart:ui';
-class MovieDetailsPage extends StatefulWidget {
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+
+
+class SerieDetailsPage extends StatefulWidget {
   final dynamic comic;
-  const MovieDetailsPage({Key? key, required this.comic}) : super(key: key);
+
+  const SerieDetailsPage({Key? key, required this.comic}) : super(key: key);
+
   @override
-  _MovieDetailsPageState createState() => _MovieDetailsPageState();
+  _SerieDetailsPageState createState() => _SerieDetailsPageState();
 }
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  String selectedMenuItem = 'Synopsis';
-  Map<String, dynamic> _movieData = {};
+
+class _SerieDetailsPageState extends State<SerieDetailsPage> {
+  String selectedMenuItem = 'Histoire';
+  Map<String, dynamic> _serieData = {};
+  Map<String, dynamic> _episodeData = {};
+
   @override
   void initState() {
     super.initState();
-    _fetchMovieData();
-  }
-  Widget _buildInfoRow(String label, dynamic value) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(label, style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 17)),
-          if (value is List)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: value.map<Widget>((item) => Text(item, style: TextStyle(color: Colors.white))).toList(),
-            )
-          else
-            Text(value, style: TextStyle(color: Colors.white)),
-        ],
-      ),
-    );
+    _fetchSerieData();
   }
 
-  List<String> _getWritersNames() {
-    List<String> writers = [];
-    for (var writer in _movieData['writers']) {
-      writers.add(writer['name']);
-    }
-    return writers;
-  }
-  List<String> _getStudioNames() {
-    List<String> studios = [];
-    for (var studio in _movieData['studios']) {
-      studios.add(studio['name']);
-    }
-    return studios;
-  }
-  List<String> _getProducerNames() {
-    List<String> producers = [];
-    for (var producer in _movieData['producers']) {
-      producers.add(producer['name']);
-    }
-    return producers;
-  }
-  Future<void> _fetchMovieData() async {
+  Future<void> _fetchSerieData() async {
     try {
       final api = ComicVineApi();
-      final data = await api.searchMovieByName(widget.comic['id']);
-      print('API Response: $data');
+      final data = await api.searchSerieByName(widget.comic['id']);
+      //print('API Response: $data');
       setState(() {
-        _movieData = data;
+        _serieData = data;
       });
     } catch (e) {
       print(e);
     }
   }
-  String shortenPrice(dynamic price) {
-    if (price == null) {
-      return 'N/A';
+
+  Future<void> _fetchEpisodeData(int id) async {
+    try {
+      final api = ComicVineApi();
+      final data = await api.searchEpisodeByName(id);
+      //print('API Response: $data');
+      print("offefefezefefefeffefefekd");
+      setState(() {
+        _episodeData[id.toString()] = data; // Stock
+        print("TESTTT" + ":" + _episodeData['version']);
+      });
+    } catch (e) {
+      print(e);
     }
-    double priceDouble = double.tryParse(price.toString()) ?? 0;
-    if (priceDouble < 1000000) {
-      return '${price} \$';
-    } else {
-      double priceMillions = priceDouble / 1000000;
-      return '${priceMillions.toStringAsFixed(0)} millions \$';
-    }
+
+    // print(_episodeData[id.toString()]?['image']);
   }
+
   @override
   Widget build(BuildContext context) {
     final comic = widget.comic;
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -104,12 +80,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-// Background image with blur effect
+          // Background image with blur effect
           Image.network(
             comic['image']['small_url'],
             fit: BoxFit.cover,
           ),
-// Blur effect
+          // Blur effect
           Positioned.fill(
             child: BackdropFilter(
               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
@@ -144,7 +120,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  " ${comic['runtime']} minutes",
+                                  " ${comic['count_of_episodes']} episodes",
                                   style: const TextStyle(
                                     fontSize: 16,
                                     color: Colors.white,
@@ -152,7 +128,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                                 ),
                                 const SizedBox(height: 4.0),
                                 Text(
-                                  '${comic['release_date']?.substring(0, 4) ?? 'N/A'}',
+                                  '${comic['start_year']?.substring(0, 4) ?? 'N/A'}',
                                   style: const TextStyle(
                                     fontSize: 14,
                                     color: Colors.white,
@@ -172,7 +148,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedMenuItem = 'Synopsis';
+                          selectedMenuItem = 'Histoire';
                         });
                       },
                       child: Container(
@@ -182,7 +158,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: selectedMenuItem == 'Synopsis'
+                              color: selectedMenuItem == 'Histoire'
                                   ? Colors.orange
                                   : Colors.transparent,
                               width: 4,
@@ -190,11 +166,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           ),
                         ),
                         child: Text(
-                          'Synopsis',
+                          'Histoire',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: selectedMenuItem == 'Synopsis'
+                            color: selectedMenuItem == 'Histoire'
                                 ? Colors.white
                                 : Colors.white.withOpacity(0.6),
                           ),
@@ -236,7 +212,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     GestureDetector(
                       onTap: () {
                         setState(() {
-                          selectedMenuItem = 'Infos';
+                          selectedMenuItem = 'Episodes';
                         });
                       },
                       child: Container(
@@ -246,7 +222,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                         decoration: BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
-                              color: selectedMenuItem == 'Infos'
+                              color: selectedMenuItem == 'Episodes'
                                   ? Colors.orange
                                   : Colors.transparent,
                               width: 4,
@@ -254,11 +230,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                           ),
                         ),
                         child: Text(
-                          'Infos',
+                          'Episodes',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: selectedMenuItem == 'Infos'
+                            color: selectedMenuItem == 'Episodes'
                                 ? Colors.white
                                 : Colors.white.withOpacity(0.6),
                           ),
@@ -267,7 +243,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     ),
                   ],
                 ),
-// Rectangle behind description
+                // Rectangle behind description
                 SizedBox(
                   height: MediaQuery.of(context).size.height *
                       0.7, // ou toute autre hauteur souhaitée
@@ -282,44 +258,62 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     ),
                     padding: const EdgeInsets.only(
                         top: 25.0, left: 27.0, bottom: 8.0, right: 27.0),
-                    child: selectedMenuItem == 'Synopsis'
-                        ? Text(
+                    child: selectedMenuItem == 'Histoire'
+                        ? HtmlWidget(
                       comic['description'] ?? 'N/A',
-                      style: TextStyle(color: Colors.white),
                     )
                         : selectedMenuItem == 'Personnages'
-                        ? (_movieData['characters'] != null &&
-                        _movieData['characters'].length > 0)
+                        ? (_serieData['characters'] != null &&
+                        _serieData['characters'].length > 0)
                         ? ListView.builder(
-                      itemCount: _movieData['characters'].length,
+                      itemCount: _serieData['characters'].length,
                       itemBuilder: (context, index) {
                         final character =
-                        _movieData['characters'][index];
-                        return Text(character['name'] ?? 'N/A',
-                            style:
-                            const TextStyle(
+                        _serieData['characters'][index];
+                        return Text(
+                            character['name'] ?? 'N/A',
+                            style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w400,
-                                fontSize: 17
-                            ));
+                                fontSize: 17));
                       },
                     )
                         : const Text('Aucun personnage trouvé')
-                        : selectedMenuItem == 'Infos'
-                        ? ListView(
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      children: [
-                        _buildInfoRow('Classification', _movieData['rating'] ?? 'N/A'),
-                        _buildInfoRow('Scénaristes', _getWritersNames()),
-                        _buildInfoRow('Producteurs', _getProducerNames()),
-                        _buildInfoRow('Studios', _getStudioNames()),
-                        _buildInfoRow('Budget', shortenPrice(_movieData['budget'])),
-                        _buildInfoRow('Recettes au box-office', shortenPrice(_movieData['box_office_revenue'])),
-                        _buildInfoRow('Recettes brutes totales', shortenPrice(_movieData['total_revenue'])),
-                      ],
+                        : selectedMenuItem == 'Episodes'
+                        ? (_serieData['episodes'] != null && _serieData['episodes'].length > 0)
+                        ? Expanded( // Ajouter un widget Expanded ici
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        physics: NeverScrollableScrollPhysics(),
+                        itemCount: _serieData['episodes'].length,
+                        itemBuilder: (context, index) {
+                          final episode = _serieData['episodes'][index];
+                          _fetchEpisodeData(episode['id']); // Appel de _fetchEpisodeData avec l'ID de l'épisode
+                          final episodeImageUrl = _episodeData[episode['id'].toString()]?['image']['small_url'] ?? "";
+                          return ListTile(
+                            leading: episodeImageUrl.isNotEmpty // Vérifier si l'URL de l'image n'est pas vide
+                                ? Image.network( // Afficher l'image de l'épisode
+                              episodeImageUrl,
+                              width: 60,
+                              height: 60,
+                              fit: BoxFit.cover,
+                            )
+                                : null, // Sinon, ne rien afficher
+                            title: Text(
+                              'Episode ${index+1}', // Utiliser l'ID de l'épisode pour récupérer le nom
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            subtitle: Text(
+                              episode['name'] ?? 'N/A',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          );
+                        },
+                      ),
                     )
-                        : const Text('Infos', style: TextStyle(color: Colors.white)),
+                        : const Text('Aucun épisode trouvé')
+                        : const Text('Episodes',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],

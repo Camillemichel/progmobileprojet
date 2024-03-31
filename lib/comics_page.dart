@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../api.dart';
 import 'comics_detail.dart';
+import 'main.dart';
 import 'RecherchePage.dart';
 import 'movie_page.dart';
 import 'series_page.dart';
-import 'main.dart';
+import 'comics_page.dart';
 
 class comics_page extends StatefulWidget {
   const comics_page({Key? key}) : super(key: key);
 
   @override
-  _comics_pageState createState() => _comics_pageState();
+  _FilmsPageState createState() => _FilmsPageState();
 }
 
-class _comics_pageState extends State<comics_page> {
+class _FilmsPageState extends State<comics_page> {
   List<dynamic> _comics = [];
 
   @override
@@ -177,7 +178,6 @@ class _comics_pageState extends State<comics_page> {
   }
 }
 
-
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -280,22 +280,28 @@ class NavigationIcon extends StatelessWidget {
       children: [
         Container(
           decoration: showHighlight ? BoxDecoration(
-            color: const Color.fromRGBO(55, 146, 255, 0.2), // Couleur de fond pour l'élément mis en évidence
+            color: const Color.fromRGBO(55, 146, 255, 0.2),
+            // Couleur de fond pour l'élément mis en évidence
             borderRadius: BorderRadius.circular(18), // Bordure arrondie
           ) : null,
-          padding: showHighlight ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8) : null,
+          padding: showHighlight ? const EdgeInsets.symmetric(
+              horizontal: 12, vertical: 8) : null,
           child: SvgPicture.asset(
             iconPath,
             width: 24,
             height: 24,
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
           ),
         ),
         const SizedBox(height: 8), // Espace constant entre l'icône et le texte
         Text(
           label,
           style: TextStyle(
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
             fontSize: 12,
             fontFamily: 'Nunito',
           ),

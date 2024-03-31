@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 import 'RecherchePage.dart';
 import 'comics_page.dart';
 import 'movie_page.dart';

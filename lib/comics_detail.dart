@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../api.dart';
 import 'dart:ui';
-import 'DetailPersonnage_histoire.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
+import 'DetailPersonnage_histoire.dart';
+
 
 class ComicDetailsPage extends StatefulWidget {
   final dynamic comic;
@@ -13,8 +14,9 @@ class ComicDetailsPage extends StatefulWidget {
   @override
   _ComicDetailsPageState createState() => _ComicDetailsPageState();
 }
-
 class _ComicDetailsPageState extends State<ComicDetailsPage> {
+  String selectedMenuItem = 'Description';
+
   @override
   Widget build(BuildContext context) {
     final comic = widget.comic;
@@ -103,20 +105,108 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                     ],
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.only(left: 16.0),
-                  padding: const EdgeInsets.only(left: 16.0, bottom: 8.0, right: 16.0),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.orange, width: 4), // Define the bottom border here
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedMenuItem = 'Description';
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      bottom: 8.0,
+                      right: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: selectedMenuItem == 'Description'
+                              ? Colors.orange
+                              : Colors.transparent,
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Description',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: selectedMenuItem == 'Description'
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.6),
+                      ),
                     ),
                   ),
-                  child: Text(
-                    'Description',
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedMenuItem = 'Auteurs';
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      bottom: 8.0,
+                      right: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: selectedMenuItem == 'Auteurs'
+                              ? Colors.orange
+                              : Colors.transparent,
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Auteurs',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: selectedMenuItem == 'Auteurs'
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedMenuItem = 'Personnages';
+                    });
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 16.0),
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      bottom: 8.0,
+                      right: 16.0,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          color: selectedMenuItem == 'Personnages'
+                              ? Colors.orange
+                              : Colors.transparent,
+                          width: 4,
+                        ),
+                      ),
+                    ),
+                    child: Text(
+                      'Personnages',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: selectedMenuItem == 'Personnages'
+                            ? Colors.white
+                            : Colors.white.withOpacity(0.6),
+                      ),
                     ),
                   ),
                 ),
@@ -129,9 +219,60 @@ class _ComicDetailsPageState extends State<ComicDetailsPage> {
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  padding: const EdgeInsets.only(top: 25.0, left: 27.0, bottom: 8.0, right: 27.0),
-                  child: HtmlWidget(
+                  padding: const EdgeInsets.only(
+                    top: 25.0,
+                    left: 27.0,
+                    bottom: 8.0,
+                    right: 27.0,
+                  ),
+                  child: selectedMenuItem == 'Description'
+                      ? HtmlWidget(
                     comic['description'] ?? 'N/A',
+                  )
+                      : selectedMenuItem == 'Personnages'
+                      ? (comic['characters'] != null &&
+                      comic['characters'].length > 0)
+                      ? ListView.builder(
+                    itemCount: comic['characters'].length,
+                    itemBuilder: (context, index) {
+                      final character =
+                      comic['characters'][index];
+                      final image =  character['image']['small_url'];
+                      final image2 =  character['image']['large_url'];
+
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  DetailPersonnage_histoire(
+                                    personnagesName:
+                                    character['name'],
+                                    personnagesImage: image ?? ' ',
+                                    // Pass the image URL to the next page
+                                  ),
+                            ),
+                          );
+                        },
+                        child: Stack(
+                          children: [
+                            Text(character['name'] ?? 'N/A',
+                                style:
+                                const TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 17
+                                )),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                      : const Text('Aucun personnage trouvé')
+                      : const Text(
+                    'Infos',
+                    style: TextStyle(color: Colors.white),
                   ),
                 ),
               ],

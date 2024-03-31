@@ -170,7 +170,7 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
   final Categorie = [
     'Nom réel:',
     'alias :',
-    'Createur:',
+    'Editeur:',
     'origine:',
     'genre :',
     'Date de naissance:'
@@ -223,6 +223,9 @@ class _PersonnageInfosState extends State<PersonnageInfos> {
 
               // Perform specific transformations based on the key
               switch (key) {
+                case 'real_name':
+                  value = value ?? "infos non disponibles";
+                  break;
                 case 'aliases':
                   value = value ?? "infos non disponibles";
                   break;

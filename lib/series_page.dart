@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:progmobileprojet/main.dart';
+import '/series_detail.dart';
 import '../api.dart';
+import 'main.dart';
 import 'RecherchePage.dart';
-import 'comics_page.dart';
 import 'movie_page.dart';
+import 'series_page.dart';
+import 'comics_page.dart';
 
 class SeriesPage extends StatefulWidget {
   const SeriesPage({Key? key}) : super(key: key);
@@ -20,6 +22,7 @@ class _SeriesPageState extends State<SeriesPage> {
     super.initState();
     _fetchMovies();
   }
+
   Future<void> _fetchMovies() async {
     final api = ComicVineApi();
     final data = await api.getData('series_list');
@@ -30,7 +33,8 @@ class _SeriesPageState extends State<SeriesPage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width; // Largeur totale de l'écran
+    final screenWidth =
+        MediaQuery.of(context).size.width; // Largeur totale de l'écran
 
     return Scaffold(
       body: Container(
@@ -66,103 +70,132 @@ class _SeriesPageState extends State<SeriesPage> {
                 child: _series.isEmpty
                     ? const CircularProgressIndicator()
                     : ListView.builder(
-                  itemCount: _series.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final comic = _series[index];
-                    return Stack(
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-                          padding: const EdgeInsets.only(top: 21.0, bottom: 12.0, left: 14.0, right: 14.0),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF1E3243),
-                            borderRadius: BorderRadius.circular(17),
-                          ),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(20.0),
-                                child: Container(
-                                  width: 128.86,
-                                  height: 132.62,
-                                  child: Image.network(
-                                    comic['image']['medium_url'],
-                                    fit: BoxFit.cover,
-                                    loadingBuilder: (BuildContext context, Widget child,
-                                        ImageChunkEvent? loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Center(
-                                        child: CircularProgressIndicator(
-                                          value: loadingProgress.expectedTotalBytes != null
-                                              ? loadingProgress.cumulativeBytesLoaded /
-                                              loadingProgress.expectedTotalBytes!
-                                              : null,
+                        itemCount: _series.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final comic = _series[index];
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SerieDetailsPage(comic: comic)),
+                              );
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 16.0, vertical: 8.0),
+                                  padding: const EdgeInsets.only(
+                                      top: 21.0,
+                                      bottom: 12.0,
+                                      left: 14.0,
+                                      right: 14.0),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1E3243),
+                                    borderRadius: BorderRadius.circular(17),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(20.0),
+                                        child: Container(
+                                          width: 128.86,
+                                          height: 132.62,
+                                          child: Image.network(
+                                            comic['image']['medium_url'],
+                                            fit: BoxFit.cover,
+                                            loadingBuilder:
+                                                (BuildContext context,
+                                                    Widget child,
+                                                    ImageChunkEvent?
+                                                        loadingProgress) {
+                                              if (loadingProgress == null)
+                                                return child;
+                                              return Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                                  value: loadingProgress
+                                                              .expectedTotalBytes !=
+                                                          null
+                                                      ? loadingProgress
+                                                              .cumulativeBytesLoaded /
+                                                          loadingProgress
+                                                              .expectedTotalBytes!
+                                                      : null,
+                                                ),
+                                              );
+                                            },
+                                          ),
                                         ),
-                                      );
-                                    },
+                                      ),
+                                      const SizedBox(width: 16.0),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              '${comic['name']} ${index + 1}',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 17,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              '${comic['count_of_episodes	']} episodes' ??
+                                                  'N/A',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 8.0),
+                                            Text(
+                                              comic['start_year	'] ?? 'N/A',
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                              ),
-                              const SizedBox(width: 16.0),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${comic['name']} ${index + 1}',
+                                Positioned(
+                                  top: 16,
+                                  left: 23,
+                                  child: Container(
+                                    width: 59.36,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      '#${index + 1}',
                                       style: const TextStyle(
                                         color: Colors.white,
-                                        fontSize: 17,
+                                        fontSize: 22,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
-                                    const SizedBox(height: 8.0),
-                                    Text(
-                                      '${comic['count_of_episodes	']} episodes' ?? 'N/A',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),const SizedBox(height: 8.0),
-                                    Text(
-                                      comic['start_year	'] ?? 'N/A',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Positioned(
-                          top: 16,
-                          left: 23,
-                          child: Container(
-                            width: 59.36,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.orange,
-                              borderRadius: BorderRadius.circular(20),
+                              ],
                             ),
-                            alignment: Alignment.center,
-                            child: Text(
-                              '#${index + 1}',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
+                          );
+                        },
+                      ),
               ),
             ),
           ],
@@ -172,7 +205,6 @@ class _SeriesPageState extends State<SeriesPage> {
     );
   }
 }
-
 
 class CustomBottomNavigationBar extends StatelessWidget {
   @override
@@ -276,22 +308,28 @@ class NavigationIcon extends StatelessWidget {
       children: [
         Container(
           decoration: showHighlight ? BoxDecoration(
-            color: const Color.fromRGBO(55, 146, 255, 0.2), // Couleur de fond pour l'élément mis en évidence
+            color: const Color.fromRGBO(55, 146, 255, 0.2),
+            // Couleur de fond pour l'élément mis en évidence
             borderRadius: BorderRadius.circular(18), // Bordure arrondie
           ) : null,
-          padding: showHighlight ? const EdgeInsets.symmetric(horizontal: 12, vertical: 8) : null,
+          padding: showHighlight ? const EdgeInsets.symmetric(
+              horizontal: 12, vertical: 8) : null,
           child: SvgPicture.asset(
             iconPath,
             width: 24,
             height: 24,
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
           ),
         ),
         const SizedBox(height: 8), // Espace constant entre l'icône et le texte
         Text(
           label,
           style: TextStyle(
-            color: showHighlight ? const Color.fromRGBO(55, 146, 255, 1) : const Color.fromRGBO(119, 139, 168, 1),
+            color: showHighlight
+                ? const Color.fromRGBO(55, 146, 255, 1)
+                : const Color.fromRGBO(119, 139, 168, 1),
             fontSize: 12,
             fontFamily: 'Nunito',
           ),
